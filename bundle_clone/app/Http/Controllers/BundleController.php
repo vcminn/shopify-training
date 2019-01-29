@@ -108,7 +108,7 @@ class BundleController extends Controller
     public function edit($id)
     {
         $bundle = Bundle::find($id);
-        $bundle_products = BundleProduct::with('bundle')->get();
+        $bundle_products = BundleProduct::with('bundle')->where('bundle_id',$bundle->id)->get();
         return view('bundle/edit',compact('bundle', 'bundle_products'));
     }
 
@@ -158,6 +158,7 @@ class BundleController extends Controller
         $bundles = Bundle::find($id);
         $bundles->delete();
         DB::table('bundle_products')->where('bundle_id', '=', $id)->delete();
+        DB::table('bundle_responses')->where('bundle_id', '=', $id)->delete();
         return redirect('/home')->with('success', 'Bundle has been deleted successfully');
     }
 

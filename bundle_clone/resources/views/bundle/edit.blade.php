@@ -9,7 +9,7 @@
             $selected_ids[] = $bundle_product->product_id;
             $quantities[] = $bundle_product->quantity;
         }
-
+        //var_dump($bundle_products);
     @endphp
     <form method="post" action="{{ route('bundles.update',$bundle->id) }}" enctype="multipart/form-data">
         @method('PATCH')

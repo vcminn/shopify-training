@@ -37,22 +37,23 @@ class ProductController extends Controller
         $this->syncPrice();
     }
 
-    function syncPrice(){
+    function syncPrice()
+    {
         $products = self::getProducts();
         $store_id = session()->get('store_id');
-        $bundle_ids = DB::table('bundles') ->where('store_id', $store_id)-> pluck('id')->toArray();
-        foreach ($bundle_ids as $bundle_id){
+        $bundle_ids = DB::table('bundles')->where('store_id', $store_id)->pluck('id')->toArray();
+        foreach ($bundle_ids as $bundle_id) {
             $base_price = 0;
-            $bundle_products = DB::table('bundle_products') -> where('bundle_id',$bundle_id)->get();
-            foreach ($bundle_products as $bundle_product){
-                foreach ($products as $key=>$product){
-                    if ($product['id'] == $bundle_product->product_id){
+            $bundle_products = DB::table('bundle_products')->where('bundle_id', $bundle_id)->get();
+            foreach ($bundle_products as $bundle_product) {
+                foreach ($products as $key => $product) {
+                    if ($product['id'] == $bundle_product->product_id) {
                         $base_price += $bundle_product->quantity * $product["variants"][0]["price"];
                         //var_dump($product);
                     }
                 }
             }
-            DB::table('bundles')->where('id',$bundle_id)->update(['base_total_price'=>$base_price]);
+            DB::table('bundles')->where('id', $bundle_id)->update(['base_total_price' => $base_price]);
         }
     }
 
@@ -339,7 +340,48 @@ class ProductController extends Controller
         }
     }
 
+    function generate_bundle()
+    {
+        $product_id = $_GET['product_id'];
+        $bundle_id = DB::table('bundle_products')->where('product_id', $product_id)->value('bundle_id');
+        $curl = curl_init('https://bundle.local/api/bundles/' . $bundle_id);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSLVERSION, 1);
+        $bundle = curl_exec($curl);
+        curl_close($curl);
+        $bundle = json_decode($bundle);
+        $bundle_image = '<div class="container" id ="full_widget" style="width: 450px; height:auto">
+                        <div class="row justify-content-md-center">
+                            <div class="col col-lg-6" style="border:solid rgba(0,0,0,0.47) 2px;" id="widget">
+                            <img height="420" width="420" src="/images/'.$bundle->image.'">
+                            </div>
+                            </div>';
+        if ($bundle ->bundle_style == 0){
+            $bundle_button = '<div class="row row justify-content-md-center">
+                            <div class="col align-self-center" id="style_announce">
+                            <button type="button" class="btn btn-primary" > Add Bundle to Cart <br> 
+                            <strike>' . $bundle->base_total_price*(100-$bundle->discount)/100 . '</strike>&nbsp' . $bundle->base_total_price . ' <br> 
+                            Save ' . $bundle->base_total_price*$bundle->discount/100 . '</button>
+                            </div>
+                            </div>
+                            </div>';
+        } else{
+            $bundle_button = '<div class="row row justify-content-md-center">
+                            <div class="col align-self-center" id="style_announce">
+                            <button type="button" class="btn btn-primary" > Add Bundle to Cart <br> Save ' . $bundle->discount . '%</button>
+                            </div>
+                            </div>
+                            </div>';
+        }
+        $full_widget = $bundle_image.$bundle_button;
 
+        return $full_widget;
+
+    }
 
     function shopify_call($token, $shop, $api_endpoint, $query = array(), $headers = array(), $method = 'GET')
     {
