@@ -145,10 +145,10 @@
                 <div class="form-group">
                     <label>Images</label>
                     <div class="box-body">
-                        <input type="file" name="image" id="fileToUpload" onchange="preview(this.files[0]);">
+                        <input type="file" name="image" id="image"  onchange="preview(this.files[0]);">
                         <small>Add your own bundle image if there are more than 4 products.</small>
                         <div class="form-group">
-                            <img id="blah" alt="your image" width="200" height="200"/>
+                            <img id="blah" alt="your image" width="200" height="200" />
                         </div>
                     </div>
                 </div>
@@ -246,7 +246,6 @@
                 });
             }
             $('#discount_percent').keyup(function () {
-                console.log('hello');
                 var input = $(this).val();
                 if (input !== '') {
                     selected_id.forEach(function (id, index) {
@@ -283,9 +282,13 @@
         }
 
         function load_widget(img_style, checked) {
-            img_src = '';
+            var img_src = '';
             if (img_style == 1){
-                var img_src = document.getElementById('blah').src;
+                if($("#image").val()) {
+                    img_src = document.getElementById('blah').src;
+                }else{
+                    img_src = "/images/" + "{{ $bundle->image }}";
+                }
             }
             if (checked === true) {
                 console.log(img_style);

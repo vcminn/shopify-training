@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Bundle;
 use App\BundleProduct;
+use App\BundleResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +18,8 @@ class BundleController extends Controller
     public function index()
     {
         $bundles = Bundle::all();
-        return view('bundle/index', compact('bundles'));
+        $bundle_response = BundleResponse::with('bundle')->get();
+        return view('bundle/index', compact('bundles','bundle_response'));
     }
 
     /**
@@ -38,14 +40,6 @@ class BundleController extends Controller
      */
     public function store(Request $request)
     {
-//        $request->validate([
-//            'name'=>'required',
-//            'dob'=>'required',
-//            'phone_number'=>'required',
-//            'city'=>'',
-//            'faculty'=>'required',
-//            'class'=>'required',
-//        ]);
         $imageName = self::fileUpload($request);
         $bundles = new Bundle([
             'store_id' => $request->get('store_id'),
@@ -61,6 +55,15 @@ class BundleController extends Controller
             'test' => 1,
         ]);
         $bundles->save();
+
+        $bundle_response = new BundleResponse([
+            'store_id' => $request->get('store_id'),
+            'bundle_id' => $bundles->id,
+            'sales'=>0,
+            'visitors'=>0,
+            'added_to_cart'=>0,
+        ]);
+        $bundle_response->save();
         //var_dump($bundles);
         $products = session()->get('all_products');
         $selected_id = $request->input('selected_products');
@@ -125,7 +128,9 @@ class BundleController extends Controller
         $bundles->internal_name = $request->get('internal_name');
         $bundles->widget_title = $request->get('widget_title');
         $bundles->description = $request->get('description');
-        $bundles->image = $imageName;
+        if ($imageName) {
+            $bundles->image = $imageName;
+        }
         $bundles->discount = $request->get('discount');
         $bundles->save();
         $bundle_products = BundleProduct::where('bundle_id', $bundles->id)
@@ -159,7 +164,7 @@ class BundleController extends Controller
     public function fileUpload(Request $request)
     {
         $this->validate($request, [
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($request->hasFile('image')) {
@@ -171,9 +176,10 @@ class BundleController extends Controller
         }
     }
 
-    function getBundleById()
+    function searchBundle($key, $value)
     {
-
+        $bundles = DB::table('bundles')->where($key,'like','%'.$value.'%')->where('active',1)->get();
+        return $bundles;
     }
 
 }

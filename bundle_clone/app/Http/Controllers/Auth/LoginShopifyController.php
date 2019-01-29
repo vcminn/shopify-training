@@ -78,8 +78,8 @@ class LoginShopifyController extends Controller
 //        var_dump(session()->get('shopifyUser'));
         Auth::login($user, true);
         //return null;
-        return redirect('/products');
-        //return redirect('/home');
+
+        return redirect('/home');
     }
 
     public function retrieveToken()

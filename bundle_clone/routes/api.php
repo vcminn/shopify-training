@@ -25,3 +25,4 @@ Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {
     #adminlte_api_routes
 });
 Route::get('bundles/{id}', 'BundleController@show');
+Route::get('bundles/{key}/{value}', 'BundleController@searchBundle');

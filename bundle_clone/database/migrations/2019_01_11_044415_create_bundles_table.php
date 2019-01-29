@@ -23,7 +23,7 @@ class CreateBundlesTable extends Migration
             $table->string('internal_name');
             $table->string('description');
             $table->string('image');
-            $table->integer('base_total_price');
+            $table->float('base_total_price');
             $table->integer('discount');
             $table->boolean('test');
             $table->timestamps();
@@ -39,7 +39,7 @@ class CreateBundlesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('bundle_response', function (Blueprint $table) {
+        Schema::create('bundle_responses', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('store_id');
             $table->integer('bundle_id');
@@ -59,6 +59,6 @@ class CreateBundlesTable extends Migration
     {
         Schema::dropIfExists('bundles');
         Schema::dropIfExists('bundle_products');
-        Schema::dropIfExists('bundle_response');
+        Schema::dropIfExists('bundle_responses');
     }
 }

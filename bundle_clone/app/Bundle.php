@@ -24,4 +24,9 @@ class Bundle extends Model
     {
         return $this->hasMany('App\BundleProduct');
     }
+
+    public function bundle_response()
+    {
+        return $this->hasMany('App\BundleResponse');
+    }
 }

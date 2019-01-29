@@ -19,10 +19,10 @@ class ProductController extends Controller
     public function sync()
     {
         $products = self::getProducts();
-        var_dump($products);
+        //var_dump($products);
         $store_id = session()->get('store_id');
         $existeds = DB::table('bundle_products')->where('store_id', $store_id)->pluck('product_id')->toArray();
-        var_dump($existeds);
+        //var_dump($existeds);
         foreach ($existeds as $existed) {
             foreach ($products as $key => $product) {
                 if ($existed == $product['id']) {
@@ -34,6 +34,26 @@ class ProductController extends Controller
             }
         }
         $this->checkStock();
+        $this->syncPrice();
+    }
+
+    function syncPrice(){
+        $products = self::getProducts();
+        $store_id = session()->get('store_id');
+        $bundle_ids = DB::table('bundles') ->where('store_id', $store_id)-> pluck('id')->toArray();
+        foreach ($bundle_ids as $bundle_id){
+            $base_price = 0;
+            $bundle_products = DB::table('bundle_products') -> where('bundle_id',$bundle_id)->get();
+            foreach ($bundle_products as $bundle_product){
+                foreach ($products as $key=>$product){
+                    if ($product['id'] == $bundle_product->product_id){
+                        $base_price += $bundle_product->quantity * $product["variants"][0]["price"];
+                        //var_dump($product);
+                    }
+                }
+            }
+            DB::table('bundles')->where('id',$bundle_id)->update(['base_total_price'=>$base_price]);
+        }
     }
 
     function checkStock()
@@ -214,24 +234,24 @@ class ProductController extends Controller
         $products = json_decode($products, true);
         $products = $products['products'];
         //print_r($products);
-        $vendors = array();
-        $types = array();
-        $vendor_types = self::shopify_call($access_token, $shop, "/admin/products.json?fields=vendor,product_type", array(), 'GET');
-        $vendor_types = json_decode($vendor_types, true);
-        $vendor_types = $vendor_types['products'];
-        //print_r($vendor_types);
-        foreach ($vendor_types as $vendor_type) {
-            if (!in_array($vendor_type['vendor'], $vendors)) {
-                $vendors[] = $vendor_type['vendor'];
-            }
-            if (!in_array($vendor_type['product_type'], $types)) {
-                $types[] = $vendor_type['product_type'];
-            }
-        }
-//        print_r($types);
-//        print_r($vendors);
-        session(['vendor' => $vendors]);
-        session(['product_type' => $types]);
+//        $vendors = array();
+//        $types = array();
+//        $vendor_types = self::shopify_call($access_token, $shop, "/admin/products.json?fields=vendor,product_type", array(), 'GET');
+//        $vendor_types = json_decode($vendor_types, true);
+//        $vendor_types = $vendor_types['products'];
+//        //print_r($vendor_types);
+//        foreach ($vendor_types as $vendor_type) {
+//            if (!in_array($vendor_type['vendor'], $vendors)) {
+//                $vendors[] = $vendor_type['vendor'];
+//            }
+//            if (!in_array($vendor_type['product_type'], $types)) {
+//                $types[] = $vendor_type['product_type'];
+//            }
+//        }
+////        print_r($types);
+////        print_r($vendors);
+//        session(['vendor' => $vendors]);
+//        session(['product_type' => $types]);
         session(['all_products' => $products]);
         return $products;
     }
@@ -264,12 +284,6 @@ class ProductController extends Controller
         } else {
             echo '';
         }
-    }
-
-    public function productsByCate(Request $request)
-    {
-        $products = session()->get('all_products');
-
     }
 
     function loadWidget(Request $request)

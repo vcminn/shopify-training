@@ -38,9 +38,9 @@
                             </label>
                         </td>
                         <td><a href="bundle\{{$bundle->id}}">{{$bundle->internal_name}}</a></td>
-                        <td>{{$bundle->visitors}}</td>
-                        <td>{{$bundle->added_to_cart}}</td>
-                        <td>{{$bundle->sales}}</td>
+                        <td>{{$bundle_response[0]->visitors}}</td>
+                        <td>{{$bundle_response[0]->added_to_cart}}</td>
+                        <td>{{$bundle_response[0]->sales}}</td>
                         <td><a href=""><i class="fas fa-eye"></i></a></td>
                         <td>
                             <form action="delete\{{$bundle->id}}" method="get">
