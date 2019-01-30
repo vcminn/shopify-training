@@ -206,7 +206,7 @@ class ProductController extends Controller
                     echo '<tr>
                             <td><img src="' . $product["image"]["src"] . '"></td>
                             <td>' . $product["title"] . '</td>
-                            <td><select id="quantity' . $product['id'] . '" name="quantity' . $product['id'] . '">';
+                            <td><select class="quantity" id="quantity' . $product['id'] . '" name="quantity' . $product['id'] . '" onchange="refreshPrice();">';
                     for ($i = 1; $i < 11; $i++) {
                         echo '
                                 <option value="' . $i . '">' . $i . '</option>
@@ -283,8 +283,17 @@ class ProductController extends Controller
             //var_dump($_GET['price']);
             echo $discounts[$index];
         } else {
-            echo '';
+            echo $_GET['price'];
         }
+    }
+
+    public function showPercent(Request $request)
+    {
+        $discount_price = (float)$_GET['discount_price'];
+        $base_price = (float)$_GET['base_price'];
+        $discount_percent = round(100-($discount_price / $base_price * 100), 2);
+        //var_dump($discount_percent);
+        echo $discount_percent;
     }
 
     function loadWidget(Request $request)
@@ -354,32 +363,34 @@ class ProductController extends Controller
         $bundle = curl_exec($curl);
         curl_close($curl);
         $bundle = json_decode($bundle);
-        $bundle_image = '<div class="container" id ="full_widget" style="width: 450px; height:auto">
-                        <div class="row justify-content-md-center">
-                            <div class="col col-lg-6" style="border:solid rgba(0,0,0,0.47) 2px;" id="widget">
-                            <img height="420" width="420" src="/images/'.$bundle->image.'">
-                            </div>
-                            </div>';
-        if ($bundle ->bundle_style == 0){
-            $bundle_button = '<div class="row row justify-content-md-center">
-                            <div class="col align-self-center" id="style_announce">
-                            <button type="button" class="btn btn-primary" > Add Bundle to Cart <br> 
-                            <strike>' . $bundle->base_total_price*(100-$bundle->discount)/100 . '</strike>&nbsp' . $bundle->base_total_price . ' <br> 
-                            Save ' . $bundle->base_total_price*$bundle->discount/100 . '</button>
-                            </div>
-                            </div>
-                            </div>';
-        } else{
-            $bundle_button = '<div class="row row justify-content-md-center">
-                            <div class="col align-self-center" id="style_announce">
-                            <button type="button" class="btn btn-primary" > Add Bundle to Cart <br> Save ' . $bundle->discount . '%</button>
-                            </div>
-                            </div>
-                            </div>';
-        }
-        $full_widget = $bundle_image.$bundle_button;
+//        $bundle_image = '<div class="container" id ="full_widget" style="width: 450px; height:auto">
+//                        <div class="row justify-content-md-center">
+//                            <div class="col col-lg-6" style="border:solid rgba(0,0,0,0.47) 2px;" id="widget">
+//                            <img height="420" width="420" src="/images/' . $bundle->image . '">
+//                            </div>
+//                            </div>';
+//        if ($bundle->bundle_style == 0) {
+//            $bundle_button = '<div class="row row justify-content-md-center">
+//                            <div class="col align-self-center" id="style_announce">
+//                            <button type="button" class="btn btn-primary" > Add Bundle to Cart <br>
+//                            <strike>' . $bundle->base_total_price * (100 - $bundle->discount) / 100 . '</strike>&nbsp;' . $bundle->base_total_price . ' <br>
+//                            Save ' . $bundle->base_total_price * $bundle->discount / 100 . '</button>
+//                            </div>
+//                            </div>
+//                            </div>';
+//        } else {
+//            $bundle_button = '<div class="row row justify-content-md-center">
+//                            <div class="col align-self-center" id="style_announce">
+//                            <button type="button" class="btn btn-primary" > Add Bundle to Cart <br> Save ' . $bundle->discount . '%</button>
+//                            </div>
+//                            </div>
+//                            </div>';
+//        }
+//        $full_widget = $bundle_image . $bundle_button;
 
-        return $full_widget;
+
+        //return $full_widget;
+        return response()->json($bundle);
 
     }
 

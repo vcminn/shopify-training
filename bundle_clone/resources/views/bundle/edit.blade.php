@@ -121,6 +121,16 @@
                         </table>
                         <table class="table">
                             <tr class="noBorder" id="subTable" style="visibility: hidden;">
+                                <td></td>
+                                <td></td>
+                                <td colspan="2" align="right">Set discount percentage</td>
+                                <td><input type="text" name="discount" id="discount_percent" placeholder="Enter ..."
+                                           style="padding: 5px;" class="form-control" value="{{$bundle->discount}}">
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="noBorder" id="subTable2" style="visibility: hidden;">
                                 <td>
                                     <button type="button" id="add-products" class="btn btn-default" data-toggle="modal"
                                             data-target="#modal-default" onClick="getSelectedId();">Add
@@ -128,9 +138,11 @@
                                     </button>
                                 </td>
                                 <td></td>
-                                <td colspan="2" align="right">Set discount percentage</td>
-                                <td><input type="text" name="discount" id="discount_percent" placeholder="Enter ..."
-                                           style="padding: 5px;" class="form-control" value="{{$bundle->discount}}">
+                                <td colspan="2" align="right">Set discount bundle price</td>
+                                <td>
+                                    <input type="text" name="discount_price" id="discount_price" placeholder="Enter ..."
+                                           style="padding: 5px;" class="form-control" value="{{$bundle->discount_price}}">
+                                    <small id="price_warning"></small>
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -145,10 +157,10 @@
                 <div class="form-group">
                     <label>Images</label>
                     <div class="box-body">
-                        <input type="file" name="image" id="image"  onchange="preview(this.files[0]);">
+                        <input type="file" name="image" id="image" onchange="preview(this.files[0]);">
                         <small>Add your own bundle image if there are more than 4 products.</small>
                         <div class="form-group">
-                            <img id="blah" alt="your image" width="200" height="200" />
+                            <img id="blah" alt="your image" width="200" height="200"/>
                         </div>
                     </div>
                 </div>
@@ -179,7 +191,7 @@
                            onClick="load_widget(this.value, this.checked);"> Combination &nbsp;&nbsp;&nbsp;
                     <input type="radio" name="image_style" value="1" onClick="load_widget(this.value, this.checked);">
                     One image
-                    <div class="container" id ="full_widget" style="width: auto; height:auto">
+                    <div class="container" id="full_widget" style="width: auto; height:auto">
                         <div class="row justify-content-md-center">
                             <div class="col col-lg-6" style="border:solid rgba(0,0,0,0.47) 2px;" id="widget">
 
@@ -196,6 +208,7 @@
             </div>
         </div>
 
+        <input type="hidden" id="base_price" name="base_price">
         <input type="hidden" id="store_id" name="store_id" value="{{{$store_id}}}">
         <div class="modal-footer">
             <button type="button" class="btn btn-default">Discard
@@ -206,6 +219,10 @@
     <script type="text/javascript">
         var selected_id = {!! json_encode($selected_ids) !!};
 
+        function refreshPrice() {
+            var bundle_base = calcPrice(0)[1];
+            $('#price_warning').html('Lower than ' + bundle_base);
+        }
         function preview($file) {
             $img_preview = window.URL.createObjectURL($file);
             document.getElementById('blah').src = $img_preview;
@@ -232,7 +249,8 @@
         }
 
         $(document).ready(function () {
-            var selected_id = {!! json_encode($selected_ids) !!};
+            var selected = {!! json_encode($selected_ids) !!};
+
             function load_discounted_price(price, id, index) {
                 $.ajax({
                     url: "{{route('show-price')}}",
@@ -245,10 +263,44 @@
                     }
                 });
             }
+
+            function load_discount_percent(base_price, discount_price) {
+                $.ajax({
+                    url: "{{route('show-percent')}}",
+                    method: "GET",
+                    data: {base_price: base_price, discount_price: discount_price},
+                    success: function (data) {
+                        console.log(data);
+                        $('#discount_percent').val(data);
+                    }
+                });
+            }
+
+            $('#discount_price').keyup(function () {
+                var input = $(this).val();
+                var selected = getSelectedProducts();
+                if (input !== '') {
+                    var price = calcPrice(input);
+                    selected.forEach(function (id, index) {
+                        load_discounted_price(price[0], id, index);
+                    });
+                    load_discount_percent(price[1], input);
+                    document.getElementById('base_price').value = price[1];
+
+                } else {
+                    var price = calcPrice(0);
+                    selected.forEach(function (id, index) {
+                        load_discounted_price(price[0], id, index);
+                    });
+                    load_discount_percent(price[1], input);
+                    document.getElementById('base_price').value = price[1];
+                }
+            });
+
             $('#discount_percent').keyup(function () {
                 var input = $(this).val();
                 if (input !== '') {
-                    selected_id.forEach(function (id, index) {
+                    selected.forEach(function (id, index) {
                         var price = calcPrice(input);
                         load_discounted_price(price[0], id, index);
                     });
@@ -258,6 +310,7 @@
             });
         });
     </script>
+
     <script type="text/javascript">
         function reload_widget(value, checked) {
             var clicked_value = $('input[name="bundle_style"]:checked').val();
@@ -283,10 +336,10 @@
 
         function load_widget(img_style, checked) {
             var img_src = '';
-            if (img_style == 1){
-                if($("#image").val()) {
+            if (img_style == 1) {
+                if ($("#image").val()) {
                     img_src = document.getElementById('blah').src;
-                }else{
+                } else {
                     img_src = "/images/" + "{{ $bundle->image }}";
                 }
             }
@@ -295,7 +348,7 @@
                 $.ajax({
                     url: "{{route('load-widget')}}",
                     method: "GET",
-                    data: {products: selected_id, style:img_style, img_src:img_src},
+                    data: {products: selected_id, style: img_style, img_src: img_src},
                     success: function (data) {
                         $('#widget').html(data);
                         //alert('Loaded widget');
@@ -384,9 +437,13 @@
             var selected_id = {!! json_encode($selected_ids) !!};
             load_data_to_table(selected_id);
             load_style($('#bundle_style').val(), true);
-            $("input[name=bundle_style][value=" + {{$bundle->bundle_style}} + "]").attr('checked', 'checked');
-            $("input[name=image_style][value=" + {{$bundle->image_style}} + "]").attr('checked', 'checked');
+            $("input[name=bundle_style][value=" + {{$bundle->bundle_style}} +"]").attr('checked', 'checked');
+            $("input[name=image_style][value=" + {{$bundle->image_style}} +"]").attr('checked', 'checked');
+            if ($('#quantity2240641859648').val('2')){
+                console.log('changed value');
+            };
             load_widget(selected_id);
+
             function load_data_to_table(value) {
                 $.ajax({
                     url: "{{route('table-products')}}",
@@ -394,7 +451,10 @@
                     data: {products: value},
                     success: function (data) {
                         $('#subTable').css("visibility", "visible");
+                        $('#subTable2').css("visibility", "visible");
                         $('#setup-products').html(data);
+                        var bundle_base = calcPrice(0)[1];
+                        $('#price_warning').html('Lower than ' + bundle_base);
                     }
                 });
             }

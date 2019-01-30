@@ -113,6 +113,15 @@
                         </table>
                         <table class="table">
                             <tr class="noBorder" id="subTable" style="visibility: hidden;">
+                                <td></td>
+                                <td></td>
+                                <td colspan="2" align="right">Set discount percentage</td>
+                                <td><input type="text" name="discount" id="discount_percent" placeholder="Enter ..."
+                                           style="padding: 5px;" class="form-control"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="noBorder" id="subTable2" style="visibility: hidden;">
                                 <td>
                                     <button type="button" id="add-products" class="btn btn-default" data-toggle="modal"
                                             data-target="#modal-default" onClick="getSelectedId();">Add
@@ -120,9 +129,12 @@
                                     </button>
                                 </td>
                                 <td></td>
-                                <td colspan="2" align="right">Set discount percentage</td>
-                                <td><input type="text" name="discount" id="discount_percent" placeholder="Enter ..."
-                                           style="padding: 5px;" class="form-control"></td>
+                                <td colspan="2" align="right">Set discount bundle price</td>
+                                <td>
+                                    <input type="text" name="discount_price" id="discount_price" placeholder="Enter ..."
+                                           style="padding: 5px;" class="form-control">
+                                    <small id="price_warning"></small>
+                                </td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -222,6 +234,18 @@
         }
 
         $(document).ready(function () {
+            function load_discount_percent(base_price, discount_price) {
+                $.ajax({
+                    url: "{{route('show-percent')}}",
+                    method: "GET",
+                    data: {base_price: base_price, discount_price: discount_price},
+                    success: function (data) {
+                        console.log(data);
+                        $('#discount_percent').val(data);
+                    }
+                });
+            }
+
             function load_discounted_price(value, id, index) {
                 $.ajax({
                     url: "{{route('show-price')}}",
@@ -229,24 +253,49 @@
                     data: {price: value, index: index},
                     success: function (data) {
                         $('#discount-price' + id).html(data);
-
-                        //boxCheck($select);
                     }
                 });
             }
-            $('#discount_percent').keyup(function () {
-                console.log('hello');
+
+            $('#discount_price').keyup(function () {
                 var input = $(this).val();
                 var selected = getSelectedProducts();
                 if (input !== '') {
+                    var price = calcPrice(input);
                     selected.forEach(function (id, index) {
-                        var price = calcPrice(input);
+                        load_discounted_price(price[0], id, index);
+                    });
+                    load_discount_percent(price[1], input);
+                    document.getElementById('base_price').value = price[1];
+
+                } else {
+                    var price = calcPrice(0);
+                    selected.forEach(function (id, index) {
+                        load_discounted_price(price[0], id, index);
+                    });
+                    load_discount_percent(price[1], input);
+                    document.getElementById('base_price').value = price[1];
+                }
+            });
+
+            $('#discount_percent').keyup(function () {
+                var input = $(this).val();
+                var selected = getSelectedProducts();
+                if (input !== '') {
+                    var price = calcPrice(input);
+                    selected.forEach(function (id, index) {
+                        load_discounted_price(price[0], id, index);
+                    });
+                    document.getElementById('base_price').value = price[1];
+                    $('#discount_price').val((price[1]*(100-price[3])/100).toFixed(2));
+                } else {
+                    var price = calcPrice(0);
+                    selected.forEach(function (id, index) {
                         load_discounted_price(price[0], id, index);
                         document.getElementById('base_price').value = price[1];
                     });
-                } else {
-                    load_discounted_price(null, 0);
                 }
+
             });
         });
     </script>
@@ -276,7 +325,7 @@
         function load_widget(img_style, checked) {
             var img_src = '';
             console.log(document.getElementById('blah').src);
-            if (img_style == 1){
+            if (img_style == 1) {
                 img_src = document.getElementById('blah').src;
             }
             if (checked === true) {
@@ -286,7 +335,7 @@
                 $.ajax({
                     url: "{{route('load-widget')}}",
                     method: "GET",
-                    data: {products: input, style:img_style, img_src:img_src},
+                    data: {products: input, style: img_style, img_src: img_src},
                     success: function (data) {
                         $('#widget').html(data);
                         //alert('Loaded widget');
@@ -294,6 +343,7 @@
                 });
             }
         }
+
         $(document).ready(function () {
             load_data();
 
@@ -351,6 +401,11 @@
     </script>
 
     <script type="text/javascript">
+        function refreshPrice() {
+            var bundle_base = calcPrice(0)[1];
+            $('#price_warning').html('Lower than ' + bundle_base);
+        }
+
         $(document).ready(function () {
             function load_cate_value(value) {
                 $.ajax({
@@ -378,7 +433,10 @@
                     data: {products: value},
                     success: function (data) {
                         $('#subTable').css("visibility", "visible");
+                        $('#subTable2').css("visibility", "visible");
                         $('#setup-products').html(data);
+                        var bundle_base = calcPrice(0)[1];
+                        $('#price_warning').html('Lower than ' + bundle_base);
                     }
                 });
             }
@@ -401,7 +459,6 @@
                 console.log(input);
                 if (input.length === 0) {
                     $('#subTable').css("visibility", "hidden");
-                    console.log('go');
                 }
                 load_data_to_table(input);
                 load_widget(input);

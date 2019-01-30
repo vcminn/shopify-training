@@ -15,6 +15,7 @@ class Bundle extends Model
         'description',
         'image',
         'discount',
+        'discount_price',
         'active',
         'base_total_price',
         'test'

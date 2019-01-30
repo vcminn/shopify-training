@@ -73,6 +73,7 @@ Route::get('/search/search-products','ProductController@searchProducts')->name('
 Route::get('/search/table-products','ProductController@productsToTable')->name('table-products');
 Route::get('/search/category','ProductController@showCateValue')->name('category');
 Route::get('/show-price','ProductController@showPrice')->name('show-price');
+Route::get('/show-percent','ProductController@showPercent')->name('show-percent');
 Route::get('/products','ProductController@index')->name('products');
 Route::get('/save', 'HomeController@toSession')->name('save');
 Route::get('/sync', 'ProductController@sync')->name('sync');

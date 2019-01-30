@@ -51,6 +51,7 @@ class BundleController extends Controller
             'description' => $request->get('description'),
             'image' => $imageName,
             'discount' => $request->get('discount'),
+            'discount_price' => $request->get('discount_price'),
             'base_total_price' => $request->get('base_price'),
             'test' => 1,
         ]);
@@ -128,9 +129,11 @@ class BundleController extends Controller
         $bundles->internal_name = $request->get('internal_name');
         $bundles->widget_title = $request->get('widget_title');
         $bundles->description = $request->get('description');
+
         if ($imageName) {
             $bundles->image = $imageName;
         }
+        $bundles->discount_price = $request->get('discount_price');
         $bundles->discount = $request->get('discount');
         $bundles->save();
         $bundle_products = BundleProduct::where('bundle_id', $bundles->id)

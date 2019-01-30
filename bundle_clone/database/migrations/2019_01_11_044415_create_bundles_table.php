@@ -24,7 +24,8 @@ class CreateBundlesTable extends Migration
             $table->string('description');
             $table->string('image');
             $table->float('base_total_price');
-            $table->integer('discount');
+            $table->float('discount_price');
+            $table->float('discount');
             $table->boolean('test');
             $table->timestamps();
         });

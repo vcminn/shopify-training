@@ -111,31 +111,34 @@
           <entry key="project.open.time.19" value="2" />
           <entry key="project.open.time.21" value="1" />
           <entry key="project.open.time.23" value="2" />
+          <entry key="project.open.time.25" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="14" />
+          <entry key="project.opened" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="4" />
           <entry key="env" value="11" />
+          <entry key="htaccess" value="1" />
           <entry key="html" value="1" />
           <entry key="js" value="6" />
           <entry key="json" value="3" />
-          <entry key="php" value="314" />
+          <entry key="php" value="319" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key=".env file" value="11" />
-          <entry key="Blade" value="134" />
+          <entry key="Blade" value="136" />
           <entry key="CSS" value="4" />
           <entry key="Enforced Plain Text" value="2" />
           <entry key="HTML" value="1" />
           <entry key="JSON" value="3" />
           <entry key="JavaScript" value="6" />
-          <entry key="PHP" value="178" />
+          <entry key="PHP" value="181" />
+          <entry key="htaccess" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -144,18 +147,18 @@
           <entry key="dummy" value="17" />
           <entry key="env" value="57" />
           <entry key="json" value="29" />
-          <entry key="php" value="25253" />
+          <entry key="php" value="26294" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key=".env file" value="57" />
-          <entry key="Blade" value="11386" />
+          <entry key="Blade" value="12087" />
           <entry key="CSS" value="1" />
           <entry key="Enforced Plain Text" value="2" />
           <entry key="HTML" value="147" />
           <entry key="JSON" value="29" />
-          <entry key="PHP" value="13718" />
+          <entry key="PHP" value="14058" />
           <entry key="PLAIN_TEXT" value="17" />
         </counts>
       </usages-collector>
@@ -171,17 +174,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/bundle/edit.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="291" column="13" lean-forward="true" selection-start-line="291" selection-start-column="13" selection-end-line="291" selection-end-column="13" />
+            <state relative-caret-position="506">
+              <caret line="223" column="66" lean-forward="true" selection-start-line="223" selection-start-column="66" selection-end-line="223" selection-end-column="66" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/mainheader.blade.php">
+        <entry file="file://$PROJECT_DIR$/app/Bundle.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="710">
-              <caret line="61" selection-start-line="61" selection-end-line="61" />
+            <state relative-caret-position="225">
+              <caret line="15" column="16" lean-forward="true" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/bundle/create.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="356">
+              <caret line="201" column="8" selection-start-line="201" selection-start-column="8" selection-end-line="201" selection-end-column="63" />
             </state>
           </provider>
         </entry>
@@ -189,43 +201,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/BundleController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="650">
-              <caret line="106" column="7" lean-forward="true" selection-start-line="106" selection-start-column="7" selection-end-line="106" selection-end-column="7" />
+            <state relative-caret-position="455">
+              <caret line="127" column="26" selection-start-line="127" selection-start-column="26" selection-end-line="127" selection-end-column="26" />
               <folding>
                 <element signature="e#40#55#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/routes/web.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="67" column="33" lean-forward="true" selection-start-line="67" selection-start-column="33" selection-end-line="67" selection-end-column="33" />
-              <folding>
-                <element signature="e#7#389#0#PHP" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.env">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/routes/api.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
-              <folding>
-                <element signature="e#7#35#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -241,24 +220,34 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Http/Middleware/FrameGuard.php">
+        <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="33" selection-start-line="19" selection-start-column="33" selection-end-line="19" selection-end-column="33" />
+            <state relative-caret-position="560">
+              <caret line="66" column="35" lean-forward="true" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
+              <folding>
+                <element signature="e#7#389#0#PHP" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ProductController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="116">
+              <caret line="262" column="36" lean-forward="true" selection-start-line="262" selection-start-column="36" selection-end-line="262" selection-end-column="36" />
+              <folding>
+                <element signature="e#40#48#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ProductController.php">
+        <entry file="file://$PROJECT_DIR$/database/migrations/2019_01_11_044415_create_bundles_table.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="515">
-              <caret line="369" column="34" selection-start-line="369" selection-start-column="34" selection-end-line="369" selection-end-column="34" />
-              <folding>
-                <element signature="e#40#48#0#PHP" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="360">
+              <caret line="26" column="41" selection-start-line="26" selection-start-column="27" selection-end-line="26" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -267,28 +256,8 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>reload</find>
-      <find>load</find>
-      <find>selected_</find>
-      <find>check</find>
-      <find>boxcheck</find>
-      <find>selected_products</find>
-      <find>selected_ids</find>
-      <find>store_</find>
-      <find>selected_pro</find>
-      <find>bundle_style</find>
-      <find>blah</find>
-      <find>preview</find>
-      <find>widget</find>
-      <find>base_price</find>
-      <find>sync</find>
-      <find>price</find>
-      <find>vendors</find>
-      <find>header</find>
-      <find>responses</find>
       <find>alt</find>
       <find>img</find>
-      <find>image</find>
       <find>input</find>
       <find>id=&quot;i</find>
       <find>file</find>
@@ -297,6 +266,26 @@
       <find>table-pro</find>
       <find>selected</find>
       <find>selected_id</find>
+      <find>image</find>
+      <find>discount</find>
+      <find>to-tabe</find>
+      <find>base_pri</find>
+      <find>discount_</find>
+      <find>small</find>
+      <find>discount_percent</find>
+      <find>discount_price</find>
+      <find>lower</find>
+      <find>to-ta</find>
+      <find>quantity</find>
+      <find>r</find>
+      <find>price_warning</find>
+      <find>subtable2</find>
+      <find>subtable</find>
+      <find>qu</find>
+      <find>to-table</find>
+      <find>to_table</find>
+      <find>hidden</find>
+      <find>round</find>
     </findStrings>
     <dirStrings>
       <dir>\var\www\bundle_clone</dir>
@@ -344,21 +333,21 @@
         <option value="$PROJECT_DIR$/resources/views/home.blade.php" />
         <option value="$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/htmlheader.blade.php" />
         <option value="$PROJECT_DIR$/app/BundleProduct.php" />
-        <option value="$PROJECT_DIR$/resources/views/bundle/create.blade.php" />
         <option value="$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/sidebar_with_spatie_menu.blade.php" />
         <option value="$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/sidebar.blade.php" />
-        <option value="$PROJECT_DIR$/app/Bundle.php" />
         <option value="$PROJECT_DIR$/app/BundleResponse.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_01_11_044415_create_bundles_table.php" />
         <option value="$PROJECT_DIR$/resources/views/bundle/index.blade.php" />
         <option value="$PROJECT_DIR$/routes/api.php" />
         <option value="$PROJECT_DIR$/resources/views/vendor/adminlte/layouts/partials/sidebar.blade.php" />
         <option value="$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/mainheader.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginShopifyController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/ProductController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/BundleController.php" />
-        <option value="$PROJECT_DIR$/resources/views/bundle/edit.blade.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_01_11_044415_create_bundles_table.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/BundleController.php" />
+        <option value="$PROJECT_DIR$/resources/views/bundle/create.blade.php" />
+        <option value="$PROJECT_DIR$/app/Bundle.php" />
+        <option value="$PROJECT_DIR$/resources/views/bundle/edit.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/ProductController.php" />
       </list>
     </option>
   </component>
@@ -548,6 +537,11 @@
             <path>
               <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
               <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -623,16 +617,16 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/resources/views/bundle" />
-      <recent name="$PROJECT_DIR$/app/Http/Controllers/Auth" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/resources/views/bundle" />
       <recent name="$PROJECT_DIR$/resources/assets/css" />
       <recent name="$PROJECT_DIR$/public/js" />
       <recent name="$PROJECT_DIR$/resources/views" />
       <recent name="$PROJECT_DIR$/public/css" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/views/bundle" />
+      <recent name="$PROJECT_DIR$/app/Http/Controllers/Auth" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -688,11 +682,12 @@
       <workItem from="1548379997917" duration="25488000" />
       <workItem from="1548640159729" duration="25138000" />
       <workItem from="1548725999861" duration="9677000" />
+      <workItem from="1548813386252" duration="17294000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="315893000" />
+    <option name="totallyTimeSpent" value="333187000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1366" y="-2" width="1920" height="1082" extended-state="6" />
@@ -701,7 +696,7 @@
       <window_info id="Structure" order="0" sideWeight="0.50053936" side_tool="true" weight="0.18836713" />
       <window_info id="npm" order="1" side_tool="true" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="3" sideWeight="0.49946064" visible="true" weight="0.2054429" />
+      <window_info active="true" content_ui="combo" id="Project" order="3" sideWeight="0.49946064" visible="true" weight="0.20757738" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32901832" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3279396" />
@@ -727,9 +722,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/welcome.blade.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/composer.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
@@ -853,20 +845,7 @@
     <entry file="file://$PROJECT_DIR$/resources/views/auth/verify.blade.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/bundle/create.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="195" column="14" lean-forward="true" selection-start-line="195" selection-start-column="14" selection-end-line="195" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/bundle/search.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/bundle/search.blade.php" />
     <entry file="file://$PROJECT_DIR$/resources/views/auth/passwords/email.blade.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -884,13 +863,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Bundle.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="16" lean-forward="true" selection-start-line="27" selection-start-column="16" selection-end-line="27" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_01_07_101115_create_stores_table.php">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -902,13 +874,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
           <caret line="25" column="53" selection-start-line="25" selection-start-column="53" selection-end-line="25" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_01_11_044415_create_bundles_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="5" lean-forward="true" selection-start-column="5" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -954,10 +919,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/mainheader.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ShopifyController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="710">
-          <caret line="61" selection-start-line="61" selection-end-line="61" />
+        <state relative-caret-position="480">
+          <caret line="33" column="29" lean-forward="true" selection-start-line="33" selection-start-column="29" selection-end-line="33" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -968,24 +933,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginShopifyController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="51" column="42" selection-start-line="51" selection-start-column="42" selection-end-line="51" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Http/Middleware/FrameGuard.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="19" column="33" selection-start-line="19" selection-start-column="33" selection-end-line="19" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ShopifyController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="33" column="29" lean-forward="true" selection-start-line="33" selection-start-column="29" selection-end-line="33" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -999,41 +950,77 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ProductController.php">
+    <entry file="file://$PROJECT_DIR$/public/.htaccess">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/mainheader.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="515">
-          <caret line="369" column="34" selection-start-line="369" selection-start-column="34" selection-end-line="369" selection-end-column="34" />
+        <state relative-caret-position="710">
+          <caret line="61" selection-start-line="61" selection-end-line="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="66" column="35" lean-forward="true" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
           <folding>
-            <element signature="e#40#48#0#PHP" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#7#389#0#PHP" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginShopifyController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="51" column="42" selection-start-line="51" selection-start-column="42" selection-end-line="51" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_01_11_044415_create_bundles_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="26" column="41" selection-start-line="26" selection-start-column="27" selection-end-line="26" selection-end-column="41" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/BundleController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="650">
-          <caret line="106" column="7" lean-forward="true" selection-start-line="106" selection-start-column="7" selection-end-line="106" selection-end-column="7" />
+        <state relative-caret-position="455">
+          <caret line="127" column="26" selection-start-line="127" selection-start-column="26" selection-end-line="127" selection-end-column="26" />
           <folding>
             <element signature="e#40#55#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/bundle/edit.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Bundle.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="291" column="13" lean-forward="true" selection-start-line="291" selection-start-column="13" selection-end-line="291" selection-end-column="13" />
+        <state relative-caret-position="225">
+          <caret line="15" column="16" lean-forward="true" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/bundle/create.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="67" column="33" lean-forward="true" selection-start-line="67" selection-start-column="33" selection-end-line="67" selection-end-column="33" />
+        <state relative-caret-position="356">
+          <caret line="201" column="8" selection-start-line="201" selection-start-column="8" selection-end-line="201" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/bundle/edit.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="506">
+          <caret line="223" column="66" lean-forward="true" selection-start-line="223" selection-start-column="66" selection-end-line="223" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ProductController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="116">
+          <caret line="262" column="36" lean-forward="true" selection-start-line="262" selection-start-column="36" selection-end-line="262" selection-end-column="36" />
           <folding>
-            <element signature="e#7#389#0#PHP" />
+            <element signature="e#40#48#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
