@@ -207,7 +207,6 @@
                 </div>
             </div>
         </div>
-
         <input type="hidden" id="base_price" name="base_price">
         <input type="hidden" id="store_id" name="store_id" value="{{{$store_id}}}">
         <div class="modal-footer">

@@ -97,7 +97,12 @@ class BundleController extends Controller
      */
     public function show($id)
     {
-        return Bundle::find($id);
+        $bundle = Bundle::find($id);
+        if ($bundle -> active == 1 ){
+            return $bundle;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -178,6 +183,19 @@ class BundleController extends Controller
             $image->move($destinationPath, $name);
             return $name;
         }
+    }
+
+    function addVisitors()
+    {
+        $domain = $_GET['domain'];
+        $product_id = $_GET['product_id'];
+        $store_id = DB::table('stores')->where('domain', '=', $domain)->value('id');
+        $bundle_id = DB::table('bundle_products')->where('product_id', '=', $product_id)->value('bundle_id');
+        $response_id = DB::table('bundle_responses')->where('store_id', '=', $store_id)->where('bundle_id', '=', $bundle_id)->value('id');
+        $response = BundleResponse::find($response_id);
+        $response->visitors += 1;
+        $response->save();
+        return $response;
     }
 
     function searchBundle($key, $value)

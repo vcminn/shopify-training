@@ -234,25 +234,6 @@ class ProductController extends Controller
         $products = self::shopify_call($access_token, $shop, "/admin/products.json", array(), 'GET');
         $products = json_decode($products, true);
         $products = $products['products'];
-        //print_r($products);
-//        $vendors = array();
-//        $types = array();
-//        $vendor_types = self::shopify_call($access_token, $shop, "/admin/products.json?fields=vendor,product_type", array(), 'GET');
-//        $vendor_types = json_decode($vendor_types, true);
-//        $vendor_types = $vendor_types['products'];
-//        //print_r($vendor_types);
-//        foreach ($vendor_types as $vendor_type) {
-//            if (!in_array($vendor_type['vendor'], $vendors)) {
-//                $vendors[] = $vendor_type['vendor'];
-//            }
-//            if (!in_array($vendor_type['product_type'], $types)) {
-//                $types[] = $vendor_type['product_type'];
-//            }
-//        }
-////        print_r($types);
-////        print_r($vendors);
-//        session(['vendor' => $vendors]);
-//        session(['product_type' => $types]);
         session(['all_products' => $products]);
         return $products;
     }
@@ -390,6 +371,7 @@ class ProductController extends Controller
 
 
         //return $full_widget;
+        //var_dump($bundle);
         return response()->json($bundle);
 
     }
