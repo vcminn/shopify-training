@@ -106,7 +106,7 @@
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.13" value="3" />
           <entry key="project.open.time.14" value="1" />
-          <entry key="project.open.time.15" value="1" />
+          <entry key="project.open.time.15" value="2" />
           <entry key="project.open.time.16" value="2" />
           <entry key="project.open.time.19" value="2" />
           <entry key="project.open.time.21" value="1" />
@@ -114,7 +114,7 @@
           <entry key="project.open.time.25" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="17" />
+          <entry key="project.opened" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -125,19 +125,19 @@
           <entry key="html" value="1" />
           <entry key="js" value="6" />
           <entry key="json" value="3" />
-          <entry key="php" value="322" />
+          <entry key="php" value="324" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key=".env file" value="11" />
-          <entry key="Blade" value="136" />
+          <entry key="Blade" value="137" />
           <entry key="CSS" value="4" />
           <entry key="Enforced Plain Text" value="2" />
           <entry key="HTML" value="1" />
           <entry key="JSON" value="3" />
           <entry key="JavaScript" value="6" />
-          <entry key="PHP" value="184" />
+          <entry key="PHP" value="185" />
           <entry key="htaccess" value="2" />
         </counts>
       </usages-collector>
@@ -148,18 +148,18 @@
           <entry key="env" value="57" />
           <entry key="htaccess" value="6" />
           <entry key="json" value="29" />
-          <entry key="php" value="26969" />
+          <entry key="php" value="27832" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key=".env file" value="57" />
-          <entry key="Blade" value="12116" />
+          <entry key="Blade" value="12197" />
           <entry key="CSS" value="1" />
           <entry key="Enforced Plain Text" value="2" />
-          <entry key="HTML" value="147" />
+          <entry key="HTML" value="148" />
           <entry key="JSON" value="29" />
-          <entry key="PHP" value="14704" />
+          <entry key="PHP" value="15485" />
           <entry key="PLAIN_TEXT" value="17" />
           <entry key="htaccess" value="6" />
         </counts>
@@ -173,13 +173,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/bundle/edit.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="386">
-              <caret line="209" column="15" lean-forward="true" selection-start-line="209" selection-start-column="15" selection-end-line="209" selection-end-column="15" />
+            <state relative-caret-position="620">
+              <caret line="293" column="42" selection-start-line="293" selection-start-column="42" selection-end-line="293" selection-end-column="42" />
               <folding>
+                <element signature="e#5831#5858#0#HTML" expanded="true" />
+                <element signature="e#6489#6516#0#HTML" expanded="true" />
+                <element signature="e#7248#7269#0#HTML" expanded="true" />
                 <element signature="e#9911#9943#0#HTML" expanded="true" />
+                <element signature="e#10067#10109#0#HTML" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -195,10 +199,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/BundleProduct.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="15" column="5" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/bundle/create.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3015">
-              <caret line="201" column="8" selection-start-line="201" selection-start-column="8" selection-end-line="201" selection-end-column="63" />
+            <state relative-caret-position="371">
+              <caret line="257" column="13" lean-forward="true" selection-start-line="236" selection-start-column="12" selection-end-line="257" selection-end-column="13" />
+              <folding>
+                <element signature="e#3846#3899#0#HTML" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -206,8 +222,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/BundleController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="560">
-              <caret line="192" column="28" selection-start-line="192" selection-start-column="28" selection-end-line="192" selection-end-column="28" />
+            <state relative-caret-position="620">
+              <caret line="196" column="26" lean-forward="true" selection-start-line="196" selection-start-column="26" selection-end-line="196" selection-end-column="26" />
               <folding>
                 <element signature="e#40#55#0#PHP" expanded="true" />
               </folding>
@@ -218,8 +234,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginShopifyController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="51" column="42" selection-start-line="51" selection-start-column="42" selection-end-line="51" selection-end-column="42" />
+            <state relative-caret-position="740">
+              <caret line="70" column="59" selection-start-line="70" selection-start-column="59" selection-end-line="70" selection-end-column="59" />
             </state>
           </provider>
         </entry>
@@ -227,8 +243,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="66" column="35" lean-forward="true" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
+            <state relative-caret-position="470">
+              <caret line="73" column="67" lean-forward="true" selection-start-line="73" selection-start-column="67" selection-end-line="73" selection-end-column="67" />
               <folding>
                 <element signature="e#7#389#0#PHP" />
               </folding>
@@ -239,8 +255,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ProductController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="401">
-              <caret line="297" column="22" lean-forward="true" selection-start-line="297" selection-start-column="22" selection-end-line="297" selection-end-column="22" />
+            <state relative-caret-position="641">
+              <caret line="368" column="60" selection-start-line="368" selection-start-column="60" selection-end-line="368" selection-end-column="60" />
               <folding>
                 <element signature="e#40#48#0#PHP" expanded="true" />
               </folding>
@@ -248,11 +264,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/routes/api.php">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/htmlheader.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="12" column="66" lean-forward="true" selection-start-line="12" selection-start-column="66" selection-end-line="12" selection-end-column="66" />
+            <state relative-caret-position="605">
+              <caret line="180" column="37" selection-start-line="180" selection-start-column="37" selection-end-line="180" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -260,8 +276,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/database/migrations/2019_01_11_044415_create_bundles_table.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="26" column="41" selection-start-line="26" selection-start-column="27" selection-end-line="26" selection-end-column="41" />
+            <state relative-caret-position="510">
+              <caret line="36" column="41" selection-start-line="36" selection-start-column="41" selection-end-line="36" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -270,25 +286,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>X-Frame-Options</find>
-      <find>full</find>
-      <find>table-pro</find>
-      <find>selected</find>
-      <find>selected_id</find>
-      <find>image</find>
-      <find>discount</find>
-      <find>to-tabe</find>
-      <find>base_pri</find>
-      <find>discount_</find>
-      <find>small</find>
-      <find>discount_percent</find>
-      <find>discount_price</find>
-      <find>lower</find>
-      <find>to-ta</find>
-      <find>quantity</find>
-      <find>r</find>
-      <find>price_warning</find>
-      <find>subtable2</find>
       <find>subtable</find>
       <find>qu</find>
       <find>to-table</find>
@@ -299,7 +296,26 @@
       <find>_GET['produc</find>
       <find>get()</find>
       <find>wid</find>
+      <find>large</find>
+      <find>select</find>
+      <find>totable</find>
+      <find>price</find>
+      <find>price_warning</find>
+      <find>sync</find>
+      <find>cal</find>
+      <find>load_data_t</find>
+      <find>$selected_ids</find>
+      <find>selected_prod</find>
+      <find>product_id</find>
+      <find>selected_products</find>
+      <find>385</find>
+      <find>image</find>
+      <find>gen</find>
+      <find>addv</find>
+      <find>refresh</find>
+      <find>reload</find>
       <find>widget</find>
+      <find>discount_percent</find>
     </findStrings>
     <dirStrings>
       <dir>\var\www\bundle_clone</dir>
@@ -343,8 +359,6 @@
         <option value="$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/contentheader.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/bundle/.php" />
         <option value="$PROJECT_DIR$/resources/views/home.blade.php" />
-        <option value="$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/htmlheader.blade.php" />
-        <option value="$PROJECT_DIR$/app/BundleProduct.php" />
         <option value="$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/sidebar_with_spatie_menu.blade.php" />
         <option value="$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/sidebar.blade.php" />
         <option value="$PROJECT_DIR$/app/BundleResponse.php" />
@@ -352,16 +366,18 @@
         <option value="$PROJECT_DIR$/routes/api.php" />
         <option value="$PROJECT_DIR$/resources/views/vendor/adminlte/layouts/partials/sidebar.blade.php" />
         <option value="$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/mainheader.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginShopifyController.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_01_11_044415_create_bundles_table.php" />
-        <option value="$PROJECT_DIR$/resources/views/bundle/create.blade.php" />
         <option value="$PROJECT_DIR$/app/Bundle.php" />
         <option value="$PROJECT_DIR$/public/.htaccess" />
+        <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/routes/form.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginShopifyController.php" />
+        <option value="$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/htmlheader.blade.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_01_11_044415_create_bundles_table.php" />
+        <option value="$PROJECT_DIR$/resources/views/bundle/create.blade.php" />
+        <option value="$PROJECT_DIR$/app/BundleProduct.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/BundleController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/ProductController.php" />
         <option value="$PROJECT_DIR$/resources/views/bundle/edit.blade.php" />
-        <option value="$PROJECT_DIR$/routes/web.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/BundleController.php" />
-        <option value="$PROJECT_DIR$/routes/form.php" />
       </list>
     </option>
   </component>
@@ -503,6 +519,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -555,13 +572,86 @@
             <path>
               <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
               <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="bundle" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+              <item name="acacha" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+              <item name="acacha" type="462c0819:PsiDirectoryNode" />
+              <item name="admin-lte-template-laravel" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+              <item name="acacha" type="462c0819:PsiDirectoryNode" />
+              <item name="admin-lte-template-laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+              <item name="acacha" type="462c0819:PsiDirectoryNode" />
+              <item name="admin-lte-template-laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+              <item name="acacha" type="462c0819:PsiDirectoryNode" />
+              <item name="admin-lte-template-laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="layouts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bundle_clone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bundle_clone" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+              <item name="acacha" type="462c0819:PsiDirectoryNode" />
+              <item name="admin-lte-template-laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="layouts" type="462c0819:PsiDirectoryNode" />
+              <item name="partials" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -640,19 +730,21 @@
       <workItem from="1548813386252" duration="17294000" />
       <workItem from="1548902337096" duration="6496000" />
       <workItem from="1548915371642" duration="4944000" />
+      <workItem from="1548985258278" duration="20570000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="344627000" />
+    <option name="totallyTimeSpent" value="365197000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1366" y="-2" width="1920" height="1082" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Structure" order="0" sideWeight="0.50053936" side_tool="true" weight="0.18836713" />
       <window_info id="npm" order="1" side_tool="true" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="3" sideWeight="0.49946064" visible="true" weight="0.21184632" />
+      <window_info active="true" content_ui="combo" id="Project" order="3" sideWeight="0.49946064" visible="true" weight="0.2139808" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32901832" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3279396" />
@@ -802,13 +894,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/BundleProduct.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="5" lean-forward="true" selection-start-line="12" selection-start-column="4" selection-end-line="15" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_01_07_101115_create_stores_table.php">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -858,13 +943,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/htmlheader.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="84" column="22" selection-start-line="84" selection-start-column="22" selection-end-line="84" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ShopifyController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
@@ -894,13 +972,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/appProxy.php" />
-    <entry file="file://$PROJECT_DIR$/resources/views/bundle/create.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3015">
-          <caret line="201" column="8" selection-start-line="201" selection-start-column="8" selection-end-line="201" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/.htaccess">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -908,37 +979,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_01_11_044415_create_bundles_table.php">
+    <entry file="file://$PROJECT_DIR$/routes/form.php" />
+    <entry file="file://$PROJECT_DIR$/routes/api.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="26" column="41" selection-start-line="26" selection-start-column="27" selection-end-line="26" selection-end-column="41" />
+          <caret line="26" column="52" lean-forward="true" selection-start-line="26" selection-start-column="52" selection-end-line="26" selection-end-column="52" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginShopifyController.php">
+    <entry file="file://$PROJECT_DIR$/vendor/acacha/admin-lte-template-laravel/resources/views/layouts/partials/htmlheader.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="51" column="42" selection-start-line="51" selection-start-column="42" selection-end-line="51" selection-end-column="42" />
+        <state relative-caret-position="605">
+          <caret line="180" column="37" selection-start-line="180" selection-start-column="37" selection-end-line="180" selection-end-column="37" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ProductController.php">
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_01_11_044415_create_bundles_table.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="297" column="22" lean-forward="true" selection-start-line="297" selection-start-column="22" selection-end-line="297" selection-end-column="22" />
-          <folding>
-            <element signature="e#40#48#0#PHP" expanded="true" />
-          </folding>
+        <state relative-caret-position="510">
+          <caret line="36" column="41" selection-start-line="36" selection-start-column="41" selection-end-line="36" selection-end-column="41" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/bundle/edit.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/BundleProduct.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="386">
-          <caret line="209" column="15" lean-forward="true" selection-start-line="209" selection-start-column="15" selection-end-line="209" selection-end-column="15" />
-          <folding>
-            <element signature="e#9911#9943#0#HTML" expanded="true" />
-          </folding>
+        <state relative-caret-position="225">
+          <caret line="15" column="5" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -949,10 +1015,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginShopifyController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="740">
+          <caret line="70" column="59" selection-start-line="70" selection-start-column="59" selection-end-line="70" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="66" column="35" lean-forward="true" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
+        <state relative-caret-position="470">
+          <caret line="73" column="67" lean-forward="true" selection-start-line="73" selection-start-column="67" selection-end-line="73" selection-end-column="67" />
           <folding>
             <element signature="e#7#389#0#PHP" />
           </folding>
@@ -961,25 +1034,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/BundleController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="560">
-          <caret line="192" column="28" selection-start-line="192" selection-start-column="28" selection-end-line="192" selection-end-column="28" />
+        <state relative-caret-position="620">
+          <caret line="196" column="26" lean-forward="true" selection-start-line="196" selection-start-column="26" selection-end-line="196" selection-end-column="26" />
           <folding>
             <element signature="e#40#55#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/form.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ProductController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="66" lean-forward="true" selection-start-line="12" selection-start-column="66" selection-end-line="12" selection-end-column="66" />
+        <state relative-caret-position="641">
+          <caret line="368" column="60" selection-start-line="368" selection-start-column="60" selection-end-line="368" selection-end-column="60" />
+          <folding>
+            <element signature="e#40#48#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/api.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/bundle/create.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="12" column="66" lean-forward="true" selection-start-line="12" selection-start-column="66" selection-end-line="12" selection-end-column="66" />
+        <state relative-caret-position="371">
+          <caret line="257" column="13" lean-forward="true" selection-start-line="236" selection-start-column="12" selection-end-line="257" selection-end-column="13" />
+          <folding>
+            <element signature="e#3846#3899#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/bundle/edit.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="620">
+          <caret line="293" column="42" selection-start-line="293" selection-start-column="42" selection-end-line="293" selection-end-column="42" />
+          <folding>
+            <element signature="e#5831#5858#0#HTML" expanded="true" />
+            <element signature="e#6489#6516#0#HTML" expanded="true" />
+            <element signature="e#7248#7269#0#HTML" expanded="true" />
+            <element signature="e#9911#9943#0#HTML" expanded="true" />
+            <element signature="e#10067#10109#0#HTML" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

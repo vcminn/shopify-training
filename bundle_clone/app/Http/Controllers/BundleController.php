@@ -19,7 +19,7 @@ class BundleController extends Controller
     {
         $bundles = Bundle::all();
         $bundle_response = BundleResponse::with('bundle')->get();
-        return view('bundle/index', compact('bundles','bundle_response'));
+        return view('bundle/index', compact('bundles', 'bundle_response'));
     }
 
     /**
@@ -60,9 +60,9 @@ class BundleController extends Controller
         $bundle_response = new BundleResponse([
             'store_id' => $request->get('store_id'),
             'bundle_id' => $bundles->id,
-            'sales'=>0,
-            'visitors'=>0,
-            'added_to_cart'=>0,
+            'sales' => 0,
+            'visitors' => 0,
+            'added_to_cart' => 0,
         ]);
         $bundle_response->save();
         //var_dump($bundles);
@@ -70,18 +70,18 @@ class BundleController extends Controller
         $selected_id = $request->input('selected_products');
         foreach ($selected_id as $id) {
             foreach ($products as $key => $product) {
-                if ($id == $product['id']) {
-                    $stock = $product["variants"][0]["inventory_quantity"];
-                    //    echo $stock;
-                    echo $request->get('quantity' . $id);
-                    $bundle_product = new BundleProduct([
-                        'store_id' => session()->get('store_id'),
-                        'bundle_id' => $bundles->id,
-                        'product_id' => $id,
-                        'quantity' => $request->get('quantity' . $id),
-                        'stock' => $stock
-                    ]);
-                    $bundle_product->save();
+                foreach ($product['variants'] as $variant) {
+                    if ($id == $variant['id']) {
+                        $stock = $variant["inventory_quantity"];
+                        $bundle_product = new BundleProduct([
+                            'store_id' => session()->get('store_id'),
+                            'bundle_id' => $bundles->id,
+                            'variant_id' => $id,
+                            'quantity' => $request->get('quantity' . $id),
+                            'stock' => $stock
+                        ]);
+                        $bundle_product->save();
+                    }
                 }
             }
         }
@@ -98,7 +98,7 @@ class BundleController extends Controller
     public function show($id)
     {
         $bundle = Bundle::find($id);
-        if ($bundle -> active == 1 ){
+        if ($bundle->active == 1) {
             return $bundle;
         } else {
             return null;
@@ -114,8 +114,8 @@ class BundleController extends Controller
     public function edit($id)
     {
         $bundle = Bundle::find($id);
-        $bundle_products = BundleProduct::with('bundle')->where('bundle_id',$bundle->id)->get();
-        return view('bundle/edit',compact('bundle', 'bundle_products'));
+        $bundle_products = BundleProduct::with('bundle')->where('bundle_id', $bundle->id)->get();
+        return view('bundle/edit', compact('bundle', 'bundle_products'));
     }
 
     /**
@@ -144,9 +144,9 @@ class BundleController extends Controller
         $bundle_products = BundleProduct::where('bundle_id', $bundles->id)
             ->where('store_id', session()->get('store_id'))
             ->get();
-        foreach ($bundle_products as $bundle_product){
-            $product_id = $bundle_product->product_id;
-            $bundle_product -> quantity = $request ->get('quantity'.$product_id);
+        foreach ($bundle_products as $bundle_product) {
+            $variant_id = $bundle_product->variant_id;
+            $bundle_product->quantity = $request->get('quantity' . $variant_id);
             $bundle_product->save();
         }
 
@@ -188,9 +188,9 @@ class BundleController extends Controller
     function addVisitors()
     {
         $domain = $_GET['domain'];
-        $product_id = $_GET['product_id'];
+        $variant_id = $_GET['variant_id'];
         $store_id = DB::table('stores')->where('domain', '=', $domain)->value('id');
-        $bundle_id = DB::table('bundle_products')->where('product_id', '=', $product_id)->value('bundle_id');
+        $bundle_id = DB::table('bundle_products')->where('variant_id', '=', $variant_id)->value('bundle_id');
         $response_id = DB::table('bundle_responses')->where('store_id', '=', $store_id)->where('bundle_id', '=', $bundle_id)->value('id');
         $response = BundleResponse::find($response_id);
         $response->visitors += 1;
@@ -200,7 +200,7 @@ class BundleController extends Controller
 
     function searchBundle($key, $value)
     {
-        $bundles = DB::table('bundles')->where($key,'like','%'.$value.'%')->where('active',1)->get();
+        $bundles = DB::table('bundles')->where($key, 'like', '%' . $value . '%')->where('active', 1)->get();
         return $bundles;
     }
 

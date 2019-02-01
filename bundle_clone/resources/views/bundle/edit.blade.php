@@ -6,7 +6,7 @@
         $selected_ids = array();
         $quantities = array();
         foreach ($bundle_products as $bundle_product){
-            $selected_ids[] = $bundle_product->product_id;
+            $selected_ids[] = $bundle_product->variant_id;
             $quantities[] = $bundle_product->quantity;
         }
         //var_dump($bundle_products);

@@ -82,11 +82,4 @@ class LoginShopifyController extends Controller
         return redirect('/home');
     }
 
-    public function retrieveToken()
-    {
-        $shopifyUser = Socialite::driver('shopify')->user();
-        $access_token = $shopifyUser->accessTokenResponseBody['access_token'];
-        session(['shopifyUser' => $shopifyUser]);
-        session(['access_token'=> $access_token]);
-    }
 }

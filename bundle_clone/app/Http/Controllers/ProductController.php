@@ -13,33 +13,35 @@ class ProductController extends Controller
     public function index()
     {
         self::getProducts();
+        self::getStoreID();
         return redirect('/home');
     }
 
     public function sync()
     {
         $products = self::getProducts();
-        //var_dump($products);
-        $store_id = session()->get('store_id');
-        $existeds = DB::table('bundle_products')->where('store_id', $store_id)->pluck('product_id')->toArray();
+        $store_id = self::getStoreID();
+        $existeds = DB::table('bundle_products')->where('store_id', $store_id)->pluck('variant_id')->toArray();
         //var_dump($existeds);
         foreach ($existeds as $existed) {
             foreach ($products as $key => $product) {
-                if ($existed == $product['id']) {
-                    DB::table('bundle_products')
-                        ->where('store_id', $store_id)->where('product_id', $existed)
-                        ->update(['stock' => $products[$key]["variants"][0]["inventory_quantity"]]);
-                    echo 'updated';
+                foreach ($product['variants'] as $variant) {
+                    if ($existed == $variant['id']) {
+                        DB::table('bundle_products')
+                            ->where('store_id', $store_id)->where('variant_id', $existed)
+                            ->update(['stock' => $variant["inventory_quantity"]]);
+                        echo 'updated';
+                    }
                 }
+
             }
         }
         $this->checkStock();
-        $this->syncPrice();
+        $this->syncPrice($products);
     }
 
-    function syncPrice()
+    function syncPrice($products)
     {
-        $products = self::getProducts();
         $store_id = session()->get('store_id');
         $bundle_ids = DB::table('bundles')->where('store_id', $store_id)->pluck('id')->toArray();
         foreach ($bundle_ids as $bundle_id) {
@@ -47,9 +49,11 @@ class ProductController extends Controller
             $bundle_products = DB::table('bundle_products')->where('bundle_id', $bundle_id)->get();
             foreach ($bundle_products as $bundle_product) {
                 foreach ($products as $key => $product) {
-                    if ($product['id'] == $bundle_product->product_id) {
-                        $base_price += $bundle_product->quantity * $product["variants"][0]["price"];
-                        //var_dump($product);
+                    foreach ($product['variants'] as $variant) {
+                        if ($product['id'] == $bundle_product->product_id) {
+                            $base_price += $bundle_product->quantity * $variant["price"];
+                            //var_dump($product);
+                        }
                     }
                 }
             }
@@ -61,18 +65,20 @@ class ProductController extends Controller
     {
         $stocked = null;
         $store_id = session()->get('store_id');
-        $existeds = DB::table('bundle_products')->where('store_id', $store_id)->pluck('product_id')->toArray();
-        $bundle_id = DB::table('bundle_products')->where('store_id', $store_id)->where('product_id', $existeds[0])
-            ->value('bundle_id');
-        foreach ($existeds as $existed) {
-            $quantity = DB::table('bundle_products')->where('store_id', $store_id)->where('product_id', $existed)
-                ->value('quantity');
-            $stock = DB::table('bundle_products')->where('store_id', $store_id)->where('product_id', $existed)
-                ->value('stock');
-            if ($quantity > $stock) {
-                DB::table('bundles')
-                    ->where('store_id', $store_id)->where('id', $bundle_id)
-                    ->update(['active' => 0]);
+        $existeds = DB::table('bundle_products')->where('store_id', $store_id)->pluck('variant_id')->toArray();
+        if ($existeds) {
+            $bundle_id = DB::table('bundle_products')->where('store_id', $store_id)->where('variant_id', $existeds[0])
+                ->value('bundle_id');
+            foreach ($existeds as $existed) {
+                $quantity = DB::table('bundle_products')->where('store_id', $store_id)->where('variant_id', $existed)
+                    ->value('quantity');
+                $stock = DB::table('bundle_products')->where('store_id', $store_id)->where('variant_id', $existed)
+                    ->value('stock');
+                if ($quantity > $stock) {
+                    DB::table('bundles')
+                        ->where('store_id', $store_id)->where('id', $bundle_id)
+                        ->update(['active' => 0]);
+                }
             }
         }
     }
@@ -102,13 +108,13 @@ class ProductController extends Controller
                     $resultProducts[$key] = $product;
                 }
             }
-            $resultProducts = self::filterExisted($resultProducts);
+            //$resultProducts = self::filterExisted($resultProducts);
             //var_dump($resultProducts);
             foreach ($resultProducts as $key => $product) {
-                $output .= '<input type="checkbox" name="selected_products[]" value="' . $product['id'] . '" id="checkbox' . $product['id'] . '"/>
-                        <label class="list-group-item" for="checkbox' . $product['id'] . '">
-                            <div class="list-item product-item selector-item clickable"
-                                 data-bold-component-id="product-selector-product-item">
+                if (count($product['variants']) <= 1) {
+                    $output .= '<input type="checkbox" name="selected_products[]" value="' . $product["variants"][0]['id'] . '" id="checkbox' . $product["variants"][0]['id'] . '"/>
+                        <label class="list-group-item" for="checkbox' . $product["variants"][0]['id'] . '">
+                            <div class="list-item product-item selector-item clickable">
                                 <div class="list-item-header">
                                     <div class="list-item-image-container">
                                         <div class="list-item-image"><img
@@ -121,21 +127,44 @@ class ProductController extends Controller
                                     <div class="selector-item-secondary-text"></div>
                                 </div>
                                 <div class="list-item-foot">
-                                    <div
-                                        class="selector-item-primary-text">' . $product["variants"][0]["price"] . '</div>
+                                    <div class="selector-item-primary-text">' . $product["variants"][0]["price"] . '</div>
                                     <div class="selector-item-secondary-text"></div>
                                 </div>
                             </div>
                         </label>';
+                } else {
+                    $output .= '<button type="button" data-toggle="collapse" data-target="#demo" class="collapsible"><img
+                                                src="' . $product["image"]["src"] . '" width="40" height="40">' . $product["title"] . '</button>
+                        <div id="demo" class="collapse" >';
+                    foreach ($product['variants'] as $variant) {
+                        $output .= '<input type="checkbox" name="selected_products[]" value="' . $variant['id'] . '" id="checkbox' . $variant['id'] . '"/>
+                        <label class="list-group-item" for="checkbox' . $variant['id'] . '">
+                            <div class="list-item product-item selector-item clickable">
+                                <div class="list-item-body">
+                                    <div class="selector-item-primary-text">' . $variant["title"] . '
+                                    </div>
+                                    <div class="selector-item-secondary-text"></div>
+                                </div>
+                                <div class="list-item-foot">
+                                    <div class="selector-item-primary-text">' . $variant["price"] . '</div>
+                                    <div class="selector-item-secondary-text"></div>
+                                </div>
+                            </div>
+                        </label>
+                       ';
+                    }
+                    $output .= ' </div>';
+                }
             }
             echo $output;
+
         } else {
-            $products = self::filterExisted($products);
+            //$products = self::filterExisted($products);
             foreach ($products as $key => $product) {
-                $output .= '<input type="checkbox" name="selected_products[]" value="' . $product['id'] . '" id="checkbox' . $product['id'] . '"/>
-                        <label class="list-group-item" for="checkbox' . $product['id'] . '">
-                            <div class="list-item product-item selector-item clickable"
-                                 data-bold-component-id="product-selector-product-item">
+                if (count($product['variants']) <= 1) {
+                    $output .= '<input type="checkbox" name="selected_products[]" value="' . $product["variants"][0]['id'] . '" id="checkbox' . $product["variants"][0]['id'] . '"/>
+                        <label class="list-group-item" for="checkbox' . $product["variants"][0]['id'] . '">
+                            <div class="list-item product-item selector-item clickable">
                                 <div class="list-item-header">
                                     <div class="list-item-image-container">
                                         <div class="list-item-image"><img
@@ -148,42 +177,63 @@ class ProductController extends Controller
                                     <div class="selector-item-secondary-text"></div>
                                 </div>
                                 <div class="list-item-foot">
-                                    <div
-                                        class="selector-item-primary-text">' . $product["variants"][0]["price"] . '</div>
+                                    <div class="selector-item-primary-text">' . $product["variants"][0]["price"] . '</div>
                                     <div class="selector-item-secondary-text"></div>
                                 </div>
                             </div>
                         </label>';
+                } else {
+                    $output .= '<button type="button" data-toggle="collapse" data-target="#demo" class="collapsible"><img
+                                                src="' . $product["image"]["src"] . '" width="40" height="40">' . $product["title"] . '</button>
+                        <div id="demo" class="collapse" >';
+                    foreach ($product['variants'] as $variant) {
+                        $output .= '<input type="checkbox" name="selected_products[]" value="' . $variant['id'] . '" id="checkbox' . $variant['id'] . '"/>
+                        <label class="list-group-item" for="checkbox' . $variant['id'] . '">
+                            <div class="list-item product-item selector-item clickable">
+                                <div class="list-item-body">
+                                    <div class="selector-item-primary-text">' . $variant["title"] . '
+                                    </div>
+                                    <div class="selector-item-secondary-text"></div>
+                                </div>
+                                <div class="list-item-foot">
+                                    <div class="selector-item-primary-text">' . $variant["price"] . '</div>
+                                    <div class="selector-item-secondary-text"></div>
+                                </div>
+                            </div>
+                        </label>
+                       ';
+                    }
+                    $output .= ' </div>';
+                }
             }
-            echo $output;
         }
+        echo $output;
     }
 
     public function filterExisted($resultProducts)
     {
         $store_id = session()->get('store_id');
         $existeds = DB::table('bundle_products')->where('store_id', $store_id)->pluck('product_id')->toArray();
-        foreach ($resultProducts as $id => $product) {
-            if (in_array($product['id'], $existeds) || $product["variants"][0]["inventory_quantity"] == 0) {
-                unset($resultProducts[$id]);
-            }
-        }
-        return $resultProducts;
+        return $existeds;
     }
 
     public function productsToTable(Request $request)
     {
         $products = session()->get('all_products');
-        //var_dump($_GET);
+        //var_dump($products);
         if (!empty($_GET['products'])) {
             $selected_id = $_GET['products'];
             //var_dump($selected_id);
             $selectedProducts = array();
-            foreach ($products as $key => $product) {
-                foreach ($selected_id as $id) {
-                    if ($id == $product['id']) {
-                        //echo "added";
-                        $selectedProducts[$id] = $product;
+            foreach ($products as $product_key => $product) {
+                foreach ($product['variants'] as $varient_key => $variant) {
+                    foreach ($selected_id as $id) {
+                        if ($id == $variant['id']) {
+                            //echo "added";
+                            $selectedProducts[$id] = $product;
+                            $selectedProducts[$id]['variants'] = [];
+                            $selectedProducts[$id]['variants'][] = $variant;
+                        }
                     }
                 }
             }
@@ -203,34 +253,33 @@ class ProductController extends Controller
                         </tr>';
                 //var_dump($products);
                 foreach ($selectedProducts as $key => $product) {
-                    echo '<tr>
+                    foreach ($product['variants'] as $variant) {
+                        echo '<tr>
                             <td><img src="' . $product["image"]["src"] . '"></td>
-                            <td>' . $product["title"] . '</td>
-                            <td><select class="quantity" id="quantity' . $product['id'] . '" name="quantity' . $product['id'] . '" onchange="refreshPrice();">';
-                    for ($i = 1; $i < 11; $i++) {
-                        echo '
+                            <td>' . $product['title'] . ' ' . $variant["title"] . '</td>
+                            <td><select class="quantity" id="quantity' . $variant['id'] . '" name="quantity' . $variant['id'] . '" onchange="refreshPrice();">';
+                        for ($i = 1; $i < 11; $i++) {
+                            echo '
                                 <option value="' . $i . '">' . $i . '</option>
                                 ';
-                    }
-                    $price = explode(".00", $product["variants"][0]["price"]);
-                    echo '</select></td>
-                        <td id="price' . $product['id'] . '">' . $price[0] . '</td>
-                            <td id="discount-price' . $product['id'] . '"></td>
+                        }
+                        $price = explode(".00", $variant["price"]);
+                        echo '</select></td>
+                        <td id="price' . $variant['id'] . '">' . $price[0] . '</td>
+                            <td id="discount-price' . $variant['id'] . '"></td>
                             <td></td>
                             <td></td>';
+                    }
                 }
             }
         }
     }
 
-    public function getProducts()
+    public
+    function getProducts()
     {
         $shop = session()->get('shopifyUser')->nickname;
         $access_token = session()->get('access_token');
-        $user_id = Auth::user()->id;
-        $store_id = DB::table('store_users')->where('user_id', $user_id)->value('store_id');
-        session(['store_id' => $store_id]);
-        // Run API call to get all products
         $products = self::shopify_call($access_token, $shop, "/admin/products.json", array(), 'GET');
         $products = json_decode($products, true);
         $products = $products['products'];
@@ -238,7 +287,17 @@ class ProductController extends Controller
         return $products;
     }
 
-    public function showCateValue(Request $request)
+    public
+    function getStoreID()
+    {
+        $user_id = Auth::user()->id;
+        $store_id = DB::table('store_users')->where('user_id', $user_id)->value('store_id');
+        session(['store_id' => $store_id]);
+        return $store_id;
+    }
+
+    public
+    function showCateValue(Request $request)
     {
         $category = $_GET['category'];
         if ($category == 'vendor') {
@@ -256,7 +315,8 @@ class ProductController extends Controller
         }
     }
 
-    public function showPrice(Request $request)
+    public
+    function showPrice(Request $request)
     {
         if (!empty($_GET['price'])) {
             $discounts = $_GET['price'];
@@ -268,11 +328,12 @@ class ProductController extends Controller
         }
     }
 
-    public function showPercent(Request $request)
+    public
+    function showPercent(Request $request)
     {
         $discount_price = (float)$_GET['discount_price'];
         $base_price = (float)$_GET['base_price'];
-        $discount_percent = round(100-($discount_price / $base_price * 100), 2);
+        $discount_percent = round(100 - ($discount_price / $base_price * 100), 2);
         //var_dump($discount_percent);
         echo $discount_percent;
     }
@@ -287,10 +348,15 @@ class ProductController extends Controller
                 $selected_id = $_GET['products'];
                 //var_dump($selected_id);
                 $selectedProducts = array();
-                foreach ($products as $key => $product) {
-                    foreach ($selected_id as $id) {
-                        if ($id == $product['id']) {
-                            $selectedProducts[$id] = $product;
+                foreach ($products as $product_key => $product) {
+                    foreach ($product['variants'] as $varient_key => $variant) {
+                        foreach ($selected_id as $id) {
+                            if ($id == $variant['id']) {
+                                //echo "added";
+                                $selectedProducts[$id] = $product;
+                                $selectedProducts[$id]['variants'] = [];
+                                $selectedProducts[$id]['variants'][] = $variant;
+                            }
                         }
                     }
                 }
@@ -332,8 +398,8 @@ class ProductController extends Controller
 
     function generate_bundle()
     {
-        $product_id = $_GET['product_id'];
-        $bundle_id = DB::table('bundle_products')->where('product_id', $product_id)->value('bundle_id');
+        $variant_id = $_GET['variant_id'];
+        $bundle_id = DB::table('bundle_products')->where('variant_id', $variant_id)->value('bundle_id');
         $curl = curl_init('https://bundle.local/api/bundles/' . $bundle_id);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);

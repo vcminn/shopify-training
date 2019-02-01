@@ -49,7 +49,7 @@
         </div>
 
         <div class="modal fade" id="modal-default" data-backdrop="static">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
 
                     <div class="modal-header">
@@ -77,7 +77,7 @@
                                    style="display: inline-block;width:100px;float:right"
                                    placeholder="equals" disabled=""><select name="category" id="category"
                                                                             class="form-control"
-                                                                            style="display: inline-block;width:185px;float:right">
+                                                                            style="display: inline-block;width:auto;float:right">
                                 <option>--</option>
                                 <option value="product_type">Product Types</option>
                                 <option value="vendor">Vendors</option>
@@ -222,7 +222,7 @@
             input.forEach(function (id, index) {
                 $quantity = parseInt($("#quantity" + id).val());
                 console.log('quantity of' + id + ':' + $quantity);
-                $reg_price = parseFloat($("#price" + id).text());
+                $reg_price = parseFloat($("#price" + id).text()).toFixed(2);
                 console.log('price of' + id + ':' + $reg_price);
                 $discount_price = ($quantity * $reg_price * (100 - $discount) / 100).toFixed(2);
                 console.log($discount_price);
