@@ -50,15 +50,25 @@ class ProductController extends Controller
             foreach ($bundle_products as $bundle_product) {
                 foreach ($products as $key => $product) {
                     foreach ($product['variants'] as $variant) {
-                        if ($product['id'] == $bundle_product->product_id) {
+                        if ($variant['id'] == $bundle_product->variant_id) {
                             $base_price += $bundle_product->quantity * $variant["price"];
-                            //var_dump($product);
                         }
                     }
                 }
             }
+            $discount_rate = DB::table('bundles')->where('id', $bundle_id)->value('discount');
+            $discount_price = round(($base_price*(100-$discount_rate))/100, 2);
             DB::table('bundles')->where('id', $bundle_id)->update(['base_total_price' => $base_price]);
+            DB::table('bundles')->where('id', $bundle_id)->update(['discount_price' => $discount_price]);
         }
+    }
+
+    function getVariants()
+    {
+        $variant_id = $_GET['variant_id'];
+        $bundle_id = DB::table('bundle_products')->where('variant_id', $variant_id)->value('bundle_id');
+        $variants = DB::table('bundle_products')->select('variant_id','quantity')->where('bundle_id', $bundle_id)->get();
+        return $variants;
     }
 
     function checkStock()

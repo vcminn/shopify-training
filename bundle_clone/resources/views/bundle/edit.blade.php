@@ -285,7 +285,6 @@
                     });
                     load_discount_percent(price[1], input);
                     document.getElementById('base_price').value = price[1];
-
                 } else {
                     var price = calcPrice(0);
                     selected.forEach(function (id, index) {

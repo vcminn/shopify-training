@@ -68,6 +68,7 @@ Route::get('/search', function () {
     return view('bundle/search');
 });
 Route::get('/add-visitors/', 'BundleController@addVisitors');
+Route::get('/get-variants', 'ProductController@getVariants');
 Route::get('/search/load-widget','ProductController@loadWidget')->name('load-widget');
 Route::get('/search/search-products','ProductController@searchProducts')->name('search-products');
 Route::get('/search/table-products','ProductController@productsToTable')->name('table-products');
