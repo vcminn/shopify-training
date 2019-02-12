@@ -198,6 +198,19 @@ class BundleController extends Controller
         return $response;
     }
 
+    function addedToCart()
+    {
+        $domain = $_GET['domain'];
+        $variant_id = $_GET['variant_id'];
+        $store_id = DB::table('stores')->where('domain', '=', $domain)->value('id');
+        $bundle_id = DB::table('bundle_products')->where('variant_id', '=', $variant_id)->value('bundle_id');
+        $response_id = DB::table('bundle_responses')->where('store_id', '=', $store_id)->where('bundle_id', '=', $bundle_id)->value('id');
+        $response = BundleResponse::find($response_id);
+        $response->added_to_cart += 1;
+        $response->save();
+        return $response;
+    }
+
     function searchBundle($key, $value)
     {
         $bundles = DB::table('bundles')->where($key, 'like', '%' . $value . '%')->where('active', 1)->get();

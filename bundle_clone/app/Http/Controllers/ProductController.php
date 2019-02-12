@@ -68,7 +68,8 @@ class ProductController extends Controller
         $variant_id = $_GET['variant_id'];
         $bundle_id = DB::table('bundle_products')->where('variant_id', $variant_id)->value('bundle_id');
         $variants = DB::table('bundle_products')->select('variant_id','quantity')->where('bundle_id', $bundle_id)->get();
-        return $variants;
+        $bundle =  DB::table('bundles')->where('id', $bundle_id)->get();
+        return [$variants,$bundle];
     }
 
     function checkStock()
