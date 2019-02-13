@@ -26,7 +26,7 @@
                     <th>Preview</th>
                     <th>Delete</th>
                 </tr>
-                @foreach($bundles as $bundle)
+                @foreach($bundles as $key => $bundle)
                     <tr>
                         <td>
                             <label class="switch">
@@ -38,9 +38,9 @@
                             </label>
                         </td>
                         <td><a href="bundle\{{$bundle->id}}">{{$bundle->internal_name}}</a></td>
-                        <td>{{$bundle_response[0]->visitors}}</td>
-                        <td>{{$bundle_response[0]->added_to_cart}}</td>
-                        <td>{{$bundle_response[0]->sales}}</td>
+                        <td>{{$bundle_response[$key]->visitors}}</td>
+                        <td>{{$bundle_response[$key]->added_to_cart}}</td>
+                        <td>{{$bundle_response[$key]->sales}}</td>
                         <td><a href=""><i class="fas fa-eye"></i></a></td>
                         <td>
                             <form action="delete\{{$bundle->id}}" method="get">

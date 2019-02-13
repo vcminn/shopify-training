@@ -57,7 +57,7 @@
         </div>
 
         <div class="modal fade" id="modal-default" data-backdrop="static">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
 
                     <div class="modal-header">
@@ -141,7 +141,8 @@
                                 <td colspan="2" align="right">Set discount bundle price</td>
                                 <td>
                                     <input type="text" name="discount_price" id="discount_price" placeholder="Enter ..."
-                                           style="padding: 5px;" class="form-control" value="{{$bundle->discount_price}}">
+                                           style="padding: 5px;" class="form-control"
+                                           value="{{$bundle->discount_price}}">
                                     <small id="price_warning"></small>
                                 </td>
                                 <td></td>
@@ -216,12 +217,168 @@
         </div>
     </form>
     <script type="text/javascript">
+        $(document).ready(function () {
+            function load_cate_value(value) {
+                $.ajax({
+                    url: "{{route('category')}}",
+                    method: "GET",
+                    data: {category: value},
+                    success: function (data) {
+                        $('#cateValue').html(data);
+                    }
+                });
+            }
+
+            $('#category').on('change', function () {
+                var input = $("#category option:selected").val();
+                console.log(input);
+                load_cate_value(input);
+                load_widget(input);
+            });
+
+            var selected_id = {!! json_encode($selected_ids) !!};
+            load_data_to_table(selected_id);
+            load_style($('bundle_style').val(), true);
+            $("input[name=bundle_style][value=" + {{$bundle->bundle_style}} +"]").attr('checked', 'checked');
+            $("input[name=image_style][value=" + {{$bundle->image_style}} +"]").attr('checked', 'checked');
+            load_widget(selected_id);
+
+            function load_data_to_table(value) {
+                $.ajax({
+                    url: "{{route('table-products')}}",
+                    method: "GET",
+                    data: {products: value},
+                    success: function (data) {
+                        $('#subTable').css("visibility", "visible");
+                        $('#subTable2').css("visibility", "visible");
+                        $('#setup-products').html(data);
+                        var bundle_base = calcPrice(0)[1];
+                        $('#price_warning').html('Lower than ' + bundle_base);
+                    }
+                });
+            }
+
+            function load_widget(input) {
+                $.ajax({
+                    url: "{{route('load-widget')}}",
+                    method: "GET",
+                    data: {products: input},
+                    success: function (data) {
+                        $('#widget').html(data);
+                        //alert('Loaded widget');
+                    }
+                });
+            }
+
+            $('#products-to-table').click(function () {
+                console.log($.makeArray($('input[name="selected_products[]"]:checked')));
+                var input = getSelectedProducts();
+                console.log(input);
+                if (input.length === 0) {
+                    $('#subTable').css("visibility", "hidden");
+                    console.log('go');
+                }
+                load_data_to_table(input);
+                load_widget(input);
+                //$('#bundle_style').attr("checked", "checked");
+            });
+            jQuery(document).ready(function() {
+                var discount = parseFloat($('#discount_percent').val());
+                console.log(discount);
+                load_prices(discount);
+
+                function load_discount_percent(base_price, discount_price) {
+                    $.ajax({
+                        url: "{{route('show-percent')}}",
+                        method: "GET",
+                        data: {base_price: base_price, discount_price: discount_price},
+                        success: function (data) {
+                            console.log(data);
+                            $('#discount_percent').val(data);
+                        }
+                    });
+                }
+
+                function load_discounted_price(value, id, index) {
+                    $.ajax({
+                        url: "{{route('show-price')}}",
+                        method: "GET",
+                        data: {price: value, index: index},
+                        success: function (data) {
+                            $('#discount-price' + id).html(data);
+                        }
+                    });
+                }
+
+                function load_prices(discount) {
+                    var input = discount;
+                    var selected = selected_id;
+                    if (input !== '') {
+                        var price = calcPrice(input);
+                        selected.forEach(function (id, index) {
+                            load_discounted_price(price[0], id, index);
+                        });
+                        load_discount_percent(price[1], input);
+                        document.getElementById('base_price').value = price[1];
+
+                    } else {
+                        var price = calcPrice(0);
+                        selected.forEach(function (id, index) {
+                            load_discounted_price(price[0], id, index);
+                        });
+                        load_discount_percent(price[1], input);
+                        document.getElementById('base_price').value = price[1];
+                    }
+                }
+                $('#discount_price').keyup(function () {
+                    var discount = $(this).val();
+                    load_prices(discount);
+                });
+
+                $('#discount_percent').keyup(function () {
+                    var input = $(this).val();
+                    var selected = selected_id;
+                    if (input !== '') {
+                        var price = calcPrice(input);
+                        selected.forEach(function (id, index) {
+                            load_discounted_price(price[0], id, index);
+                        });
+                        document.getElementById('base_price').value = price[1];
+                        $('#discount_price').val((price[1]*(100-price[3])/100).toFixed(2));
+                    } else {
+                        var price = calcPrice(0);
+                        selected.forEach(function (id, index) {
+                            load_discounted_price(price[0], id, index);
+                            document.getElementById('base_price').value = price[1];
+                        });
+                    }
+
+                });
+            });
+        });
+
+        function getSelectedProducts() {
+            var total = $('input[name="selected_products[]"]:checked').length;
+            $.ajax({
+                url: "{{route('save')}}",
+                data: {total: total}
+            });
+            //console.log(total);
+            var selectedId = [];
+            $('input[name="selected_products[]"]:checked').each(function () {
+                selectedId.push($(this).val());
+            });
+            //console.log(selectedId);
+            return selectedId;
+        }
+
         var selected_id = {!! json_encode($selected_ids) !!};
 
         function refreshPrice() {
             var bundle_base = calcPrice(0)[1];
             $('#price_warning').html('Lower than ' + bundle_base);
         }
+
         function preview($file) {
             $img_preview = window.URL.createObjectURL($file);
             document.getElementById('blah').src = $img_preview;
@@ -230,16 +387,16 @@
         function calcPrice($discount) {
             var price_array = new Array();
             var input = selected_id;
-            console.log(input);
+            //console.log(input);
             var bundle_base = 0;
             var bundle_price = 0;
             input.forEach(function (id, index) {
                 $quantity = parseInt($("#quantity" + id).val());
-                console.log('quantity of' + id + ':' + $quantity);
+                //console.log($("#quantity" + id).val());
                 $reg_price = parseFloat($("#price" + id).text());
-                console.log('price of' + id + ':' + $reg_price);
+                //console.log('price of' + id + ':' + $reg_price);
                 $discount_price = ($quantity * $reg_price * (100 - $discount) / 100).toFixed(2);
-                console.log($discount_price);
+                //console.log($discount_price);
                 price_array.push($discount_price);
                 bundle_base += ($quantity * $reg_price);
                 bundle_price = (bundle_base * (100 - $discount) / 100).toFixed(2);
@@ -248,64 +405,7 @@
         }
 
         $(document).ready(function () {
-            var selected = {!! json_encode($selected_ids) !!};
 
-            function load_discounted_price(price, id, index) {
-                $.ajax({
-                    url: "{{route('show-price')}}",
-                    method: "GET",
-                    data: {price: price, index: index},
-                    success: function (data) {
-                        $('#discount-price' + id).html(data);
-
-                        //boxCheck($select);
-                    }
-                });
-            }
-
-            function load_discount_percent(base_price, discount_price) {
-                $.ajax({
-                    url: "{{route('show-percent')}}",
-                    method: "GET",
-                    data: {base_price: base_price, discount_price: discount_price},
-                    success: function (data) {
-                        console.log(data);
-                        $('#discount_percent').val(data);
-                    }
-                });
-            }
-
-            $('#discount_price').keyup(function () {
-                var input = $(this).val();
-                var selected = getSelectedProducts();
-                if (input !== '') {
-                    var price = calcPrice(input);
-                    selected.forEach(function (id, index) {
-                        load_discounted_price(price[0], id, index);
-                    });
-                    load_discount_percent(price[1], input);
-                    document.getElementById('base_price').value = price[1];
-                } else {
-                    var price = calcPrice(0);
-                    selected.forEach(function (id, index) {
-                        load_discounted_price(price[0], id, index);
-                    });
-                    load_discount_percent(price[1], input);
-                    document.getElementById('base_price').value = price[1];
-                }
-            });
-
-            $('#discount_percent').keyup(function () {
-                var input = $(this).val();
-                if (input !== '') {
-                    selected.forEach(function (id, index) {
-                        var price = calcPrice(input);
-                        load_discounted_price(price[0], id, index);
-                    });
-                } else {
-                    load_discounted_price(null, 0, 0);
-                }
-            });
         });
     </script>
 
@@ -411,93 +511,7 @@
         }
     </script>
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            function load_cate_value(value) {
-                $.ajax({
-                    url: "{{route('category')}}",
-                    method: "GET",
-                    data: {category: value},
-                    success: function (data) {
-                        $('#cateValue').html(data);
-                    }
-                });
-            }
 
-            $('#category').on('change', function () {
-                var input = $("#category option:selected").val();
-                console.log(input);
-                load_cate_value(input);
-                load_widget(input);
-            });
-        });
-        $(document).ready(function () {
-            var selected_id = {!! json_encode($selected_ids) !!};
-            load_data_to_table(selected_id);
-            load_style($('#bundle_style').val(), true);
-            $("input[name=bundle_style][value=" + {{$bundle->bundle_style}} +"]").attr('checked', 'checked');
-            $("input[name=image_style][value=" + {{$bundle->image_style}} +"]").attr('checked', 'checked');
-            if ($('#quantity2240641859648').val('2')){
-                console.log('changed value');
-            };
-            load_widget(selected_id);
-
-            function load_data_to_table(value) {
-                $.ajax({
-                    url: "{{route('table-products')}}",
-                    method: "GET",
-                    data: {products: value},
-                    success: function (data) {
-                        $('#subTable').css("visibility", "visible");
-                        $('#subTable2').css("visibility", "visible");
-                        $('#setup-products').html(data);
-                        var bundle_base = calcPrice(0)[1];
-                        $('#price_warning').html('Lower than ' + bundle_base);
-                    }
-                });
-            }
-
-            function load_widget(input) {
-                $.ajax({
-                    url: "{{route('load-widget')}}",
-                    method: "GET",
-                    data: {products: input},
-                    success: function (data) {
-                        $('#widget').html(data);
-                        //alert('Loaded widget');
-                    }
-                });
-            }
-
-            $('#products-to-table').click(function () {
-                console.log($.makeArray($('input[name="selected_products[]"]:checked')));
-                var input = getSelectedProducts();
-                console.log(input);
-                if (input.length === 0) {
-                    $('#subTable').css("visibility", "hidden");
-                    console.log('go');
-                }
-                load_data_to_table(input);
-                load_widget(input);
-                //$('#bundle_style').attr("checked", "checked");
-            });
-        });
-
-        function getSelectedProducts() {
-            var total = $('input[name="selected_products[]"]:checked').length;
-            $.ajax({
-                url: "{{route('save')}}",
-                data: {total: total}
-            });
-            //console.log(total);
-            var selectedId = [];
-            $('input[name="selected_products[]"]:checked').each(function () {
-                selectedId.push($(this).val());
-            });
-            //console.log(selectedId);
-            return selectedId;
-        }
-    </script>
     <script>
         function Clear() {
             clearRadioGroup("RadioInputName");

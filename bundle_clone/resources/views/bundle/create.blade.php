@@ -234,6 +234,7 @@
         }
 
         $(document).ready(function () {
+            load_prices();
             function load_discount_percent(base_price, discount_price) {
                 $.ajax({
                     url: "{{route('show-percent')}}",
@@ -256,9 +257,8 @@
                     }
                 });
             }
-
-            $('#discount_price').keyup(function () {
-                var input = $(this).val();
+            function load_prices(discount) {
+                var input = discount;
                 var selected = getSelectedProducts();
                 if (input !== '') {
                     var price = calcPrice(input);
@@ -276,6 +276,10 @@
                     load_discount_percent(price[1], input);
                     document.getElementById('base_price').value = price[1];
                 }
+            }
+            $('#discount_price').keyup(function () {
+                var discount = $(this).val();
+                load_prices(discount);
             });
 
             $('#discount_percent').keyup(function () {

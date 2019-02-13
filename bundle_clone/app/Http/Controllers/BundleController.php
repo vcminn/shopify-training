@@ -17,7 +17,8 @@ class BundleController extends Controller
      */
     public function index()
     {
-        $bundles = Bundle::all();
+        $store_id = session()->get('store_id');
+        $bundles = Bundle::all()->where('store_id', $store_id);
         $bundle_response = BundleResponse::with('bundle')->get();
         return view('bundle/index', compact('bundles', 'bundle_response'));
     }
