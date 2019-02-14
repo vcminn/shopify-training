@@ -79,7 +79,7 @@ class LoginShopifyController extends Controller
         Auth::login($user, true);
         //return null;
 
-        return redirect('/home');
+        return redirect('/products');
     }
 
 }

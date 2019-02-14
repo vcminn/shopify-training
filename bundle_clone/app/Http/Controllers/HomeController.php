@@ -34,9 +34,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user_id = \Auth::user()->id;
-        $store_id = DB::table('store_users')->where('user_id',$user_id)->value('store_id');
-        session(['store_id' => $store_id]);
+
         return view('home');
     }
 

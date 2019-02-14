@@ -144,9 +144,9 @@ class ProductController extends Controller
                             </div>
                         </label>';
                 } else {
-                    $output .= '<button type="button" data-toggle="collapse" data-target="#demo" class="collapsible"><img
+                    $output .= '<button type="button" data-toggle="collapse" data-target="#demo'.$product['id'].'" name="'.$product['id'].'" class="collapsible"><img
                                                 src="' . $product["image"]["src"] . '" width="40" height="40">' . $product["title"] . '</button>
-                        <div id="demo" class="collapse" >';
+                        <div id="demo'.$product['id'].'" class="collapse" >';
                     foreach ($product['variants'] as $variant) {
                         $output .= '<input type="checkbox" name="selected_products[]" value="' . $variant['id'] . '" id="checkbox' . $variant['id'] . '"/>
                         <label class="list-group-item" for="checkbox' . $variant['id'] . '">
@@ -194,9 +194,9 @@ class ProductController extends Controller
                             </div>
                         </label>';
                 } else {
-                    $output .= '<button type="button" data-toggle="collapse" data-target="#demo" class="collapsible"><img
+                    $output .= '<button type="button" data-toggle="collapse" data-target="#demo'.$product['id'].'" name="'.$product['id'].'"class="collapsible"><img
                                                 src="' . $product["image"]["src"] . '" width="40" height="40">' . $product["title"] . '</button>
-                        <div id="demo" class="collapse" >';
+                        <div id="demo'.$product['id'].'" class="collapse" >';
                     foreach ($product['variants'] as $variant) {
                         $output .= '<input type="checkbox" name="selected_products[]" value="' . $variant['id'] . '" id="checkbox' . $variant['id'] . '">
                         <label class="list-group-item" for="checkbox' . $variant['id'] . '">
