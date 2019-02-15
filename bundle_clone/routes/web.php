@@ -71,6 +71,7 @@ Route::get('/add-visitors/', 'BundleController@addVisitors');
 Route::get('/added-to-cart/', 'BundleController@addedToCart');
 Route::get('/get-other-existed/{id}', 'ProductController@getOtherExisted');
 Route::get('/get-variants', 'ProductController@getVariants');
+Route::get('/generate-image','ProductController@generateImage')->name('generate-image');
 Route::get('/search/load-widget','ProductController@loadWidget')->name('load-widget');
 Route::get('/search/search-products','ProductController@searchProducts')->name('search-products');
 Route::get('/search/table-products','ProductController@productsToTable')->name('table-products');

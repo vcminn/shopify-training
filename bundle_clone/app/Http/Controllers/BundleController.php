@@ -78,6 +78,7 @@ class BundleController extends Controller
                             'store_id' => session()->get('store_id'),
                             'bundle_id' => $bundles->id,
                             'variant_id' => $id,
+                            'image' => $request->get('variant_'.$id.'_image'),
                             'quantity' => $request->get('quantity' . $id),
                             'stock' => $stock
                         ]);
@@ -185,6 +186,8 @@ class BundleController extends Controller
             return $name;
         }
     }
+
+
 
     function addVisitors()
     {

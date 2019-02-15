@@ -72,6 +72,12 @@ class ProductController extends Controller
         return [$variants, $bundle];
     }
 
+    function getBundle($bundle_id)
+    {
+        $variant_ids = DB::table('bundle_products')->where('bundle_id', $bundle_id)->pluck('variant_id')->toArray();
+        return $variant_ids;
+    }
+
     function checkStock()
     {
         $stocked = null;
@@ -123,7 +129,7 @@ class ProductController extends Controller
             //var_dump($resultProducts);
             foreach ($resultProducts as $key => $product) {
                 if (count($product['variants']) <= 1) {
-                    $output .= '<input type="checkbox" name="selected_products[]" value="' . $product["variants"][0]['id'] . '" id="checkbox' . $product["variants"][0]['id'] . '"/>
+                    $output .= '<input type="checkbox" name="selected_products[]" value="' . $product["variants"][0]["id"] . '" id="checkbox' . $product["variants"][0]['id'] . '"/>
                         <label class="list-group-item" for="checkbox' . $product["variants"][0]['id'] . '">
                             <div class="list-item product-item selector-item clickable">
                                 <div class="list-item-header">
@@ -142,11 +148,12 @@ class ProductController extends Controller
                                     <div class="selector-item-secondary-text"></div>
                                 </div>
                             </div>
-                        </label>';
+                        </label>
+                        <input type="hidden" id="variant_'.$product["variants"][0]["id"].'_image" name="variant_'.$product["variants"][0]["id"].'_image" value="'.$product["image"]["src"].'">';
                 } else {
-                    $output .= '<button type="button" data-toggle="collapse" data-target="#demo'.$product['id'].'" name="'.$product['id'].'" class="collapsible"><img
+                    $output .= '<button type="button" data-toggle="collapse" data-target="#demo' . $product['id'] . '" name="' . $product['id'] . '" class="collapsible"><img
                                                 src="' . $product["image"]["src"] . '" width="40" height="40">' . $product["title"] . '</button>
-                        <div id="demo'.$product['id'].'" class="collapse" >';
+                        <div id="demo' . $product['id'] . '" class="collapse" >';
                     foreach ($product['variants'] as $variant) {
                         $output .= '<input type="checkbox" name="selected_products[]" value="' . $variant['id'] . '" id="checkbox' . $variant['id'] . '"/>
                         <label class="list-group-item" for="checkbox' . $variant['id'] . '">
@@ -162,7 +169,7 @@ class ProductController extends Controller
                                 </div>
                             </div>
                         </label>
-                       ';
+                        <input type="hidden" id="variant_'.$variant['id'].'_image" name="variant_'.$variant['id'].'_image" value="'.$product["image"]['src'].'">';
                     }
                     $output .= ' </div>';
                 }
@@ -192,11 +199,12 @@ class ProductController extends Controller
                                     <div class="selector-item-secondary-text"></div>
                                 </div>
                             </div>
-                        </label>';
+                        </label>
+                        <input type="hidden" id="variant_'.$product["variants"][0]['id'].'_image" name="variant_'.$product["variants"][0]['id'].'_image" value="'.$product["image"]['src'].'">';
                 } else {
-                    $output .= '<button type="button" data-toggle="collapse" data-target="#demo'.$product['id'].'" name="'.$product['id'].'"class="collapsible"><img
+                    $output .= '<button type="button" data-toggle="collapse" data-target="#demo' . $product['id'] . '" name="' . $product['id'] . '"class="collapsible"><img
                                                 src="' . $product["image"]["src"] . '" width="40" height="40">' . $product["title"] . '</button>
-                        <div id="demo'.$product['id'].'" class="collapse" >';
+                        <div id="demo' . $product['id'] . '" class="collapse" >';
                     foreach ($product['variants'] as $variant) {
                         $output .= '<input type="checkbox" name="selected_products[]" value="' . $variant['id'] . '" id="checkbox' . $variant['id'] . '">
                         <label class="list-group-item" for="checkbox' . $variant['id'] . '">
@@ -212,9 +220,10 @@ class ProductController extends Controller
                                 </div>
                             </div>
                         </label>
+                        <input type="hidden" id="variant_'.$variant['id'].'_image" name="variant_'.$variant['id'].'_image" value="'.$product["image"]['src'].'">
                        ';
                     }
-                    $output .= ' </div>';
+                    $output .= '</div>';
                 }
             }
         }
@@ -231,8 +240,19 @@ class ProductController extends Controller
     public function getOtherExisted($bundle_id)
     {
         $store_id = session()->get('store_id');
-        $existeds = DB::table('bundle_products')->where('store_id', $store_id)->whereNotIn('bundle_id',[$bundle_id])->pluck('variant_id')->toArray();
+        $existeds = DB::table('bundle_products')->where('store_id', $store_id)->whereNotIn('bundle_id', [$bundle_id])->pluck('variant_id')->toArray();
         return $existeds;
+    }
+
+    function getBundleImages($bundle_id)
+    {
+        $variant_ids = self::getBundle($bundle_id);
+        $images = [];
+        foreach ($variant_ids as $variant_id){
+            $image = DB::table('bundle_products')->where('variant_id', $variant_id)->value('image');
+            $images[$variant_id] = $image;
+        }
+        return $images;
     }
 
     public function productsToTable(Request $request)
@@ -293,8 +313,7 @@ class ProductController extends Controller
         }
     }
 
-    public
-    function getProducts()
+    public function getProducts()
     {
         $shop = session()->get('shopifyUser')->nickname;
         $access_token = session()->get('access_token');
@@ -305,8 +324,7 @@ class ProductController extends Controller
         return $products;
     }
 
-    public
-    function getStoreID()
+    public function getStoreID()
     {
         $user_id = Auth::user()->id;
         $store_id = DB::table('store_users')->where('user_id', $user_id)->value('store_id');
@@ -314,8 +332,7 @@ class ProductController extends Controller
         return $store_id;
     }
 
-    public
-    function showCateValue(Request $request)
+    public function showCateValue(Request $request)
     {
         $category = $_GET['category'];
         if ($category == 'vendor') {
@@ -333,8 +350,7 @@ class ProductController extends Controller
         }
     }
 
-    public
-    function showPrice(Request $request)
+    public function showPrice(Request $request)
     {
         if (!empty($_GET['price'])) {
             $discounts = $_GET['price'];
@@ -345,8 +361,7 @@ class ProductController extends Controller
         }
     }
 
-    public
-    function showPercent(Request $request)
+    public function showPercent(Request $request)
     {
         $discount_price = (float)$_GET['discount_price'];
         $base_price = (float)$_GET['base_price'];
@@ -431,26 +446,24 @@ class ProductController extends Controller
         return response()->json($bundle);
     }
 
-    function generate_image($bundle_id)
+    function generateImage()
     {
-        $products = self::getProducts();
-        $variants = DB::table('bundle_products')->select('variant_id')->where('bundle_id', $bundle_id)->get();
-        $first_value = reset($variants);
-        $first_key = key($variants);
+        $bundle_id = request()->get('bundle_id');
+        $images = $this->getBundleImages($bundle_id);
+        $first_value = reset($images);
+        $first_key = key($images);
         //var_dump($first_key);
-        echo '<div class="col-md-3"><img src="' . $first_value["image"]["src"] . '"></div>';
-        unset($variants[$first_key]);
-        foreach ($products as $key => $product) {
-            foreach ($variants as $variant) {
-                if ($variant['id'] == $variant) {
-                    $output = '<div class="col-md-1"><i class="fa fa-plus-circle"></i></div>';
+        $output = '<div class="row">';
+        $output .= '<div class="col-md-3"><img width="200px" height="200px" src="' . $first_value . '"></div>';
+        unset($images[$first_key]);
+        foreach ($images as $image) {
+                    $output .= '<div class="col-md-1"><i class="fa fa-plus-circle"></i></div>';
                     $output .= '<div class="col-md-3">
-                            <img src="' . $product['variants'][$key]["image"]["src"] . '">
-                            
+                            <img width="200px" height="200px" src="' . $image . '">                         
                           </div>';
-                }
-            }
         }
+        $output .= '</div>';
+        return $output;
     }
 
     function shopify_call($token, $shop, $api_endpoint, $query = array(), $headers = array(), $method = 'GET')

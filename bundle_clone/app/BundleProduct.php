@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class BundleProduct extends Model
 {
     protected $fillable = [
-        'store_id', 'bundle_id', 'variant_id', 'quantity', 'stock',
+        'store_id', 'bundle_id', 'variant_id', 'quantity', 'stock', 'image'
     ];
 
     public function bundle()
