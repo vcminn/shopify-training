@@ -78,7 +78,7 @@ class LoginShopifyController extends Controller
 //        var_dump(session()->get('shopifyUser'));
         Auth::login($user, true);
         //return null;
-
+        //dispatch(new \App\Jobs\RegisterUninstallShopifyWebhook($store->domain, $shopifyUser->token, $store));
         return redirect('/products');
     }
 

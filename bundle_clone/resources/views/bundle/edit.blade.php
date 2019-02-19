@@ -115,6 +115,8 @@
             <div class="box-body">
                 <div class="form-group">
                     <label>Setup</label>
+                    <button id="reloadPrice" style="float:right" class="btn btn-secondary" type="button"
+                            onClick="updateDiscountPrice();"><i class="fas fa-refresh"></i></button>
                     <div class="box-body">
                         <table class="table" id="setup-products">
 
@@ -172,8 +174,7 @@
                 <label>Widget</label>
                 <button id="sync" style="float:right" class="btn btn-secondary" type="button"
                         onClick="reload_widget();">
-                    <i
-                        class="fas fa-refresh"></i></button>
+                    <i class="fas fa-refresh"></i></button>
                 <div class="form-group">
                     <label>Title</label>
 
@@ -282,9 +283,11 @@
                 load_widget(input);
                 //$('#bundle_style').attr("checked", "checked");
             });
-            jQuery(document).ready(function() {
+
                 var discount = parseFloat($('#discount_percent').val());
                 console.log(discount);
+
+
                 load_prices(discount);
 
                 function load_discount_percent(base_price, discount_price) {
@@ -354,7 +357,7 @@
                     }
 
                 });
-            });
+
         });
 
         function getSelectedProducts() {
@@ -374,9 +377,19 @@
 
         var selected_id = {!! json_encode($selected_ids) !!};
 
+        function updateDiscountPrice (){
+            var bundle_base = parseInt(document.getElementById('base_price').value);
+            var discount_percent = parseFloat($('#discount_percent').val());
+            $('#discount_price').val((bundle_base*(100-discount_percent)/100).toFixed(2));
+            var selected = selected_id;
+            var price = calcPrice(discount_percent);
+
+        }
         function refreshPrice() {
-            var bundle_base = calcPrice(0)[1];
-            $('#price_warning').html('Lower than ' + bundle_base);
+            var bundle_price = calcPrice(0);
+            $('#price_warning').html('Lower than ' + bundle_price[1]);
+            document.getElementById('base_price').value = bundle_price[1];
+            console.log(document.getElementById('base_price').value);
         }
 
         function preview($file) {
@@ -399,14 +412,12 @@
                 //console.log($discount_price);
                 price_array.push($discount_price);
                 bundle_base += ($quantity * $reg_price);
+                console.log(bundle_base);
                 bundle_price = (bundle_base * (100 - $discount) / 100).toFixed(2);
             })
             return [price_array, bundle_base, bundle_price, $discount];
         }
 
-        $(document).ready(function () {
-
-        });
     </script>
 
     <script type="text/javascript">

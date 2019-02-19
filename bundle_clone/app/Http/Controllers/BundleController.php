@@ -136,7 +136,7 @@ class BundleController extends Controller
         $bundles->internal_name = $request->get('internal_name');
         $bundles->widget_title = $request->get('widget_title');
         $bundles->description = $request->get('description');
-
+        $bundles->base_total_price = $request->get('base_price');
         if ($imageName) {
             $bundles->image = $imageName;
         }
@@ -187,7 +187,10 @@ class BundleController extends Controller
         }
     }
 
+    function captureWebhook(Request $request){
 
+        return $request;
+    }
 
     function addVisitors()
     {

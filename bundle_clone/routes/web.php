@@ -67,6 +67,7 @@ Route::resource('bundles', 'BundleController')->only([
 Route::get('/search', function () {
     return view('bundle/search');
 });
+
 Route::get('/add-visitors/', 'BundleController@addVisitors');
 Route::get('/added-to-cart/', 'BundleController@addedToCart');
 Route::get('/get-other-existed/{id}', 'ProductController@getOtherExisted');
@@ -93,6 +94,7 @@ Route::group(['middleware' => 'auth'], function () {
     //Please do not remove this if you want adminlte:route and adminlte:link commands to works correctly.
     #adminlte_routes
 });
+
 Route::get('/oauth/authorize', 'ShopifyController@getResponse');
 Route::get('/shopify', 'Auth\LoginShopifyController@getAccessToken')->name('token');
 
