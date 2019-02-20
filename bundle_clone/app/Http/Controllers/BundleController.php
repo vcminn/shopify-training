@@ -7,6 +7,7 @@ use App\BundleProduct;
 use App\BundleResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BundleController extends Controller
 {
@@ -187,9 +188,19 @@ class BundleController extends Controller
         }
     }
 
-    function captureWebhook(Request $request){
-
-        return $request;
+    function captureWebhook(Request $request)
+    {
+        $data = file_get_contents('php://input');
+        $method = $request->method();
+        if ($method == 'POST') {
+            $response = BundleResponse::find(3);
+            $response->sales += 1;
+            $response->save();
+            Log::info($data);
+        } else {
+            Log::info($method);
+        }
+        //return $request;
     }
 
     function addVisitors()

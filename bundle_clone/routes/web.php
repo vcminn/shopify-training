@@ -45,9 +45,8 @@ Route::get('stores/{storeId}/shopify/subscribe', function (\Illuminate\Http\Requ
     return redirect('/home');
 
 })->name('shopify.subscribe');
-Route::post('webhook/shopify/order-created', function (\Illuminate\Http\Request $request) {
-    // Handle order created
-})->middleware('webhook');
+Route::match(['get', 'post'],'webhook/shopify/order-created', 'BundleController@captureWebhook');
+Route::match(['get', 'post'],'webhook/shopify/product-updated', 'BundleController@captureWebhook');
 Route::post('webhook/shopify/uninstall', function (\Illuminate\Http\Request $request) {
     // Handle app uninstall
 })->middleware('webhook');

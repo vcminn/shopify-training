@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Log;
 
-class RegisterUninstallShopifyWebhook implements ShouldQueue
+class RegisterProductUpdateShopifyWebhook implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -52,7 +52,7 @@ class RegisterUninstallShopifyWebhook implements ShouldQueue
 
         // Get the current uninstall webhooks
         $orderCreateWebhook = array_get($shopify->get('webhooks', [
-            'topic' => 'app/uninstalled',
+            'topic' => 'products/update',
             'limit' => 250,
             'fields' => 'id,address'
         ]), 'webhooks', []);
@@ -61,12 +61,17 @@ class RegisterUninstallShopifyWebhook implements ShouldQueue
         if(collect($orderCreateWebhook)->isEmpty()) {
             $shopify->create('webhooks', [
                 'webhook' => [
-                    'topic' => 'app/uninstalled',
-                    'address' => env('APP_URL') . "webhook/shopify/uninstall",
+                    'topic' => 'products/update',
+                    'address' => env('APP_URL') . "webhook/shopify/product-updated",
                     'format' => 'json'
                 ]
             ]);
         }
+        $orderCreateWebhook = array_get($shopify->get('webhooks', [
+
+            'limit' => 250,
+            'fields' => 'topic,id,address'
+        ]), 'webhooks', []);
         Log::info($this->domain);
         Log::info($this->token);
         Log::info($orderCreateWebhook);

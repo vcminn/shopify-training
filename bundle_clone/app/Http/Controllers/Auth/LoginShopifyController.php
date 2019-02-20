@@ -32,7 +32,7 @@ class LoginShopifyController extends Controller
         );
         return Socialite::with('shopify')
             ->setConfig($config)
-            ->scopes(['read_products','write_products'])
+            ->scopes(['read_products','write_products','read_orders', 'write_orders'])
             ->redirect();
 
     }
@@ -74,11 +74,10 @@ class LoginShopifyController extends Controller
         session(['shopifyUser' => $shopifyUser]);
         session(['access_token'=> $access_token]);
 
-//        var_dump(session()->get('all_products'));
-//        var_dump(session()->get('shopifyUser'));
         Auth::login($user, true);
-        //return null;
-        //dispatch(new \App\Jobs\RegisterUninstallShopifyWebhook($store->domain, $shopifyUser->token, $store));
+        dispatch(new \App\Jobs\RegisterProductUpdateShopifyWebhook($store->domain, $shopifyUser->token, $store));
+        dispatch(new \App\Jobs\RegisterUninstallShopifyWebhook($store->domain, $shopifyUser->token, $store));
+        dispatch(new \App\Jobs\RegisterOrderCreateShopifyWebhook($store->domain, $shopifyUser->token, $store));
         return redirect('/products');
     }
 

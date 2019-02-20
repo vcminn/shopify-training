@@ -26,4 +26,3 @@ Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {
 });
 Route::get('bundles/{id}', 'BundleController@show');
 Route::get('bundles/{key}/{value}', 'BundleController@searchBundle');
-Route::post('webhook/shopify/order-created/', 'BundleController@captureWebhook');
