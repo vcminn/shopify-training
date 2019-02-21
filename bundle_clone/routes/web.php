@@ -82,6 +82,7 @@ Route::get('/products','ProductController@index')->name('products');
 Route::get('/save', 'HomeController@toSession')->name('save');
 Route::get('/sync', 'ProductController@sync')->name('sync');
 Route::get('/generate-bundle/', 'ProductController@generate_bundle')->name('generate-bundle');
+Route::get('/generate-pagination/', 'ProductController@generatePagination');
 Route::get('/sync-price', 'ProductController@syncPrice')->name('sync-price');
 Route::get('/change-state', 'ProductController@changeState')->name('change-state');
 Route::get('/load-style', 'ProductController@loadStyle')->name('load-style');
