@@ -37,12 +37,9 @@
                     <label>Choose products</label>
                     <div class="box-body">
                         <button type="button" id="add-products" class="btn btn-default" data-toggle="modal"
-                                data-target="#modal-default" onClick="getSelectedId();">Add
+                                data-target="#modal-default">Add
                             Products
                         </button>
-                        <div id="msg" class="ajax_response">
-
-                        </div>
                     </div>
                 </div>
             </div>
@@ -66,24 +63,6 @@
                             <button type="submit" name="search" id="search-btn" class="btn btn-primary">
                                 <i class="fa fa-search"></i></button>
                         </span>
-                        </div>
-
-                        <div class="form-group">
-                            <select name="cateValue" id="cateValue" class="form-control"
-                                    style="display: inline-block;width:185px;float:right">
-
-                            </select>
-                            <input type="text" class="form-control"
-                                   style="display: inline-block;width:100px;float:right"
-                                   placeholder="equals" disabled=""><select name="category" id="category"
-                                                                            class="form-control"
-                                                                            style="display: inline-block;width:auto;float:right">
-                                <option>--</option>
-                                <option value="product_type">Product Types</option>
-                                <option value="vendor">Vendors</option>
-                            </select><input type="text" class="form-control"
-                                            style="display: inline-block;width:100px;float:right" placeholder="Where"
-                                            disabled="">
                         </div>
                     </div>
 
@@ -137,10 +116,18 @@
                                 <td>
                                     <input type="text" name="discount_price" id="discount_price" placeholder="Enter ..."
                                            style="padding: 5px;" class="form-control">
+
                                     <small id="price_warning"></small>
                                 </td>
-                                <td></td>
-                                <td></td>
+                                <td>
+                                    <button id="sync" style="float:right" class="btn btn-secondary" type="button"
+                                            onClick="refreshPrice()"><i
+                                            class="fas fa-refresh"></i>
+                                    </button>
+                                </td>
+                                <td>
+
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -166,8 +153,7 @@
                 <label>Widget</label>
                 <button id="sync" style="float:right" class="btn btn-secondary" type="button"
                         onClick="reload_widget();">
-                    <i
-                        class="fas fa-refresh"></i></button>
+                    <i class="fas fa-refresh"></i></button>
                 <div class="form-group">
                     <label>Title</label>
 

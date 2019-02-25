@@ -67,8 +67,5 @@ class RegisterUninstallShopifyWebhook implements ShouldQueue
                 ]
             ]);
         }
-        Log::info($this->domain);
-        Log::info($this->token);
-        Log::info($orderCreateWebhook);
     }
 }

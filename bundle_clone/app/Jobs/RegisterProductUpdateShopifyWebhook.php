@@ -72,8 +72,6 @@ class RegisterProductUpdateShopifyWebhook implements ShouldQueue
             'limit' => 250,
             'fields' => 'topic,id,address'
         ]), 'webhooks', []);
-        Log::info($this->domain);
-        Log::info($this->token);
         Log::info($orderCreateWebhook);
     }
 }

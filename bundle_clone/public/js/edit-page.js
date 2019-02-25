@@ -2,7 +2,10 @@ function preview($file) {
     $img_preview = window.URL.createObjectURL($file);
     document.getElementById('blah').src = $img_preview;
 }
-
+$('.quantity').on('change',function(){
+    console.log('pro');
+    loadQuantity();
+});
 $(document).ready(function () {
     load_prices();
 
@@ -37,15 +40,18 @@ $(document).ready(function () {
                 load_discounted_price(price[0], id, index);
             });
             load_discount_percent(price[1], input);
-            document.getElementById('base_price').value = price[1];
+            if (price[1] !== 0 ) {
+                document.getElementById('base_price').value = price[1];
+            }
         } else {
             var price = calcPrice(0);
             selected.forEach(function (id, index) {
                 load_discounted_price(price[0], id, index);
             });
             load_discount_percent(price[1], input);
-            document.getElementById('base_price').value = price[1];
-            console.log(price[1]);
+            if (price[1] !== 0 ) {
+                document.getElementById('base_price').value = price[1];
+            }
         }
 
     }
@@ -100,16 +106,17 @@ function load_style(clicked_value, checked) {
 
 function load_widget(img_style, checked) {
     var img_src = '';
-
     if (img_style == 1) {
-        img_src = document.getElementById('blah').src;
+        if ($("#image").val()) {
+            img_src = document.getElementById('blah').src;
+        } else {
+            img_src = "/images/" + bundle_image;
+        }
     }
     if (checked === true) {
-
         var input = getSelectedProducts();
-
         $.ajax({
-            url: "search/load-widget",
+            url: "/search/load-widget",
             method: "GET",
             data: {products: input, style: img_style, img_src: img_src},
             success: function (data) {
@@ -120,7 +127,7 @@ function load_widget(img_style, checked) {
     }
 }
 
-var selected = new Array;
+
 $(document).ready(function () {
     load_data();
     generatePagination();
@@ -160,7 +167,7 @@ $(document).ready(function () {
 
 function generatePagination() {
     $.ajax({
-        url: "generate-pagination",
+        url: "/generate-pagination",
         method: "GET",
         success: function (data) {
             $('#pagination').html(data);
@@ -170,13 +177,14 @@ function generatePagination() {
 
 function load_data(page = 1, value = '') {
     $.ajax({
-        url: "search/search-products",
+        url: "/search/search-products",
         method: "GET",
         data: {page: page, search: value},
         success: function (data) {
             $('#products').html(data);
         }
     });
+
 }
 
 
@@ -209,23 +217,20 @@ $(document).on('click', '#products-to-table', function () {
                 prices[selected[$i]] = $('#price' + selected[$i]).html();
             }
         }
-        console.log(prices);
     });
 });
-var prices = new Array;
 
 $(document).on('change', '.quantity', function () {
     var price = calcPrice(0);
     var bundle_base = price[1];
-    console.log(price);
     $('#price_warning').html('Lower than ' + bundle_base);
     document.getElementById('base_price').value = price[1];
+    console.log(document.getElementById('base_price').value);
     var variant_id = this.id.replace('quantity', '');
-    console.log(variant_id)
     var quantity = this.options[this.selectedIndex].value;
     var reg_price = prices[variant_id];
     var new_reg_price = quantity * reg_price;
-    console.log(new_reg_price)
+
     $('#price' + variant_id).html(new_reg_price);
 });
 
@@ -238,7 +243,6 @@ function refreshPrice() {
 function calcPrice($discount) {
     var price_array = new Array();
     var input = selected;
-
     var bundle_base = 0;
     var bundle_price = 0;
     input.forEach(function (id, index) {

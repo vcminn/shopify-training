@@ -63,21 +63,6 @@ class ProductController extends Controller
         }
     }
 
-    function getVariants()
-    {
-        $variant_id = $_GET['variant_id'];
-        $bundle_id = DB::table('bundle_products')->where('variant_id', $variant_id)->value('bundle_id');
-        $variants = DB::table('bundle_products')->select('variant_id', 'quantity')->where('bundle_id', $bundle_id)->get();
-        $bundle = DB::table('bundles')->where('id', $bundle_id)->get();
-        return [$variants, $bundle];
-    }
-
-    function getBundle($bundle_id)
-    {
-        $variant_ids = DB::table('bundle_products')->where('bundle_id', $bundle_id)->pluck('variant_id')->toArray();
-        return $variant_ids;
-    }
-
     function checkStock()
     {
         $stocked = null;
@@ -100,34 +85,28 @@ class ProductController extends Controller
         }
     }
 
-    function paginateArray($array, $perPage, $currentPage = 1){
-        $paginated = array_slice($array, ($currentPage-1)*$perPage, $perPage);
+    function paginateArray($array, $perPage, $currentPage = 1)
+    {
+        $paginated = array_slice($array, ($currentPage - 1) * $perPage, $perPage);
         return $paginated;
     }
 
-    function generatePagination(){
+    function generatePagination()
+    {
         $products = session()->get('all_products');
         $count = count($products);
         $perPage = 5;
-        $numOfPages = $count/$perPage;
+        $numOfPages = $count / $perPage;
         $output = '<a href="#">&laquo;</a>';
-        for ($i = 1; $i <= $numOfPages; $i++ ){
-            $output .= '<a href="#" onclick ="load_data('.$i.')">'.$i.'</a>';
+        for ($i = 1; $i <= $numOfPages; $i++) {
+            if ($i == 1) {
+                $output .= '<a href="#" onclick ="load_data(' . $i . ')" class="page active">' . $i . '</a>';
+            } else {
+                $output .= '<a href="#" onclick ="load_data(' . $i . ')" class="page">' . $i . '</a>';
+            }
         }
         $output .= '<a href="#">&raquo;</a>';
         echo $output;
-    }
-
-    function changeState()
-    {
-        if (isset($_GET['value'])) {
-            $store_id = session()->get('store_id');
-            $value = $_GET['value'];
-            $bundle_id = $_GET['id'];
-            DB::table('bundles')
-                ->where('store_id', $store_id)->where('id', $bundle_id)
-                ->update(['active' => $value]);
-        }
     }
 
     public function searchProducts(Request $request)
@@ -135,51 +114,42 @@ class ProductController extends Controller
         $products = session()->get('all_products');
         $page = $request->get('page');
         $perPage = 5;
-        $paginatedProducts = $this->paginateArray($products,$perPage, $page);
-        //var_dump($products);
         $resultProducts = array();
         $output = "";
         if (!empty($_GET["search"])) {
-            foreach ($paginatedProducts as $key => $product) {
+            foreach ($products as $key => $product) {
                 if (strpos(strtolower($product['title']), strtolower($_GET["search"])) !== false) {
                     $resultProducts[$key] = $product;
                 }
             }
+            $paginatedProducts = $this->paginateArray($resultProducts, $perPage, $page);
             //$resultProducts = self::filterExisted($resultProducts);
-            //var_dump($resultProducts);
-            foreach ($resultProducts as $key => $product) {
+            //var_dump($paginatedProducts);
+            foreach ($paginatedProducts as $key => $product) {
                 if (count($product['variants']) <= 1) {
-                    $output .= '<tr>
-                    <input type="checkbox" name="selected_products[]" value="' . $product["variants"][0]["id"] . '" id="checkbox' . $product["variants"][0]['id'] . '"/>
-                        <label class="list-group-item" for="checkbox' . $product["variants"][0]['id'] . '">
-                            <div class="list-item product-item selector-item clickable">
-                                <div class="list-item-header">
-                                    <div class="list-item-image-container">
-                                        <div class="list-item-image"><img
-                                                src="' . $product["image"]["src"] . '"></div>
-                                    </div>
-                                </div>
-                                <div class="list-item-body">
-                                    <div class="selector-item-primary-text">' . $product["title"] . '
-                                    </div>
-                                    <div class="selector-item-secondary-text"></div>
-                                </div>
-                                <div class="list-item-foot">
+                    $output .= '
+                        <label class="list-group-item" >
+                            <div class="list-item product-item selector-item ">
+                                <img width="40px" height="40px"
+                                                src="' . $product["image"]["src"] . '">
+                                ' . $product["title"] . ' 
+                                <div class="list-item-foot">  
                                     <div class="selector-item-primary-text">' . $product["variants"][0]["price"] . '</div>
-                                    <div class="selector-item-secondary-text"></div>
+                                    <div class="selector-item-secondary-text"><button name ="add-product" id="add-product" type="button"  value ="id=' . $product["variants"][0]['id'] . '&price=' . $product["variants"][0]["price"] . '" class="btn btn-primary" >+</button></div>
                                 </div>
                             </div>
                         </label>
-                        <input type="hidden" id="variant_'.$product["variants"][0]["id"].'_image" name="variant_'.$product["variants"][0]["id"].'_image" value="'.$product["image"]["src"].'">
-                        </tr>';
+                        <input type="hidden" id="variant_' . $product["variants"][0]['id'] . '_image" name="variant_' . $product["variants"][0]['id'] . '_image" value="' . $product["image"]['src'] . '">
+                        <input type="hidden" id="reg_price' . $product["variants"][0]['id'] . '" name="reg_price' . $product["variants"][0]['id'] . '" value="' . $product["variants"][0]["price"] . '">
+                        ';
                 } else {
                     $output .= '<button type="button" data-toggle="collapse" data-target="#demo' . $product['id'] . '" name="' . $product['id'] . '" class="collapsible"><img
                                                 src="' . $product["image"]["src"] . '" width="40" height="40">' . $product["title"] . '</button>
                         <div id="demo' . $product['id'] . '" class="collapse" >';
                     foreach ($product['variants'] as $variant) {
-                        $output .= '<input type="checkbox" name="selected_products[]" value="' . $variant['id'] . '" id="checkbox' . $variant['id'] . '"/>
-                        <label class="list-group-item" for="checkbox' . $variant['id'] . '">
-                            <div class="list-item product-item selector-item clickable">
+                        $output .= '
+                        <label class="list-group-item" >
+                            <div class="list-item product-item selector-item ">
                                 <div class="list-item-body">
                                     <div class="selector-item-primary-text">' . $variant["title"] . '
                                     </div>
@@ -187,19 +157,19 @@ class ProductController extends Controller
                                 </div>
                                 <div class="list-item-foot">
                                     <div class="selector-item-primary-text">' . $variant["price"] . '</div>
-                                    <div class="selector-item-secondary-text"></div>
+                                    <div class="selector-item-secondary-text"><button name ="add-product" id="add-product" type="button" value ="id=' . $variant['id'] . '&price=' . $variant["price"] . '" class="btn btn-primary" >+</button></div>
                                 </div>
                             </div>
                         </label>
-                        <input type="hidden" id="variant_'.$variant['id'].'_image" name="variant_'.$variant['id'].'_image" value="'.$product["image"]['src'].'">';
+                        <input type="hidden" id="variant_' . $variant['id'] . '_image" name="variant_' . $variant['id'] . '_image" value="' . $product["image"]['src'] . '">
+                        <input type="hidden" id="reg_price' . $variant['id'] . '" name="reg_price' . $variant['id'] . '" value="' . $variant["price"] . '">
+                       ';
                     }
                     $output .= ' </div>';
                 }
             }
-            echo $output;
-
         } else {
-            //$products = self::filterExisted($products);
+            $paginatedProducts = $this->paginateArray($products, $perPage, $page);
             foreach ($paginatedProducts as $key => $product) {
                 if (count($product['variants']) <= 1) {
                     $output .= '
@@ -208,16 +178,14 @@ class ProductController extends Controller
                                 <img width="40px" height="40px"
                                                 src="' . $product["image"]["src"] . '">
                                 ' . $product["title"] . '
-                                    
-                                
                                 <div class="list-item-foot">
-                                    
                                     <div class="selector-item-primary-text">' . $product["variants"][0]["price"] . '</div>
-                                    <div class="selector-item-secondary-text"><button name ="add-product" id="add-product" type="button"  value ="'.$product["variants"][0]['id'].'"class="btn btn-primary" >+</button></div>
+                                    <div class="selector-item-secondary-text"><button name ="add-product" id="add-product" type="button"  value ="id=' . $product["variants"][0]['id'] . '&price=' . $product["variants"][0]["price"] . '" class="btn btn-primary" >+</button></div>
                                 </div>
                             </div>
                         </label>
-                        <input type="hidden" id="variant_'.$product["variants"][0]['id'].'_image" name="variant_'.$product["variants"][0]['id'].'_image" value="'.$product["image"]['src'].'">
+                        <input type="hidden" id="variant_' . $product["variants"][0]['id'] . '_image" name="variant_' . $product["variants"][0]['id'] . '_image" value="' . $product["image"]['src'] . '">
+                        <input type="hidden" id="reg_price' . $product["variants"][0]['id'] . '" name="reg_price' . $product["variants"][0]['id'] . '" value="' . $product["variants"][0]["price"] . '">
                         ';
                 } else {
                     $output .= '<button type="button" data-toggle="collapse" data-target="#demo' . $product['id'] . '" name="' . $product['id'] . '"  class="collapsible"><img
@@ -234,11 +202,12 @@ class ProductController extends Controller
                                 </div>
                                 <div class="list-item-foot">
                                     <div class="selector-item-primary-text">' . $variant["price"] . '</div>
-                                    <div class="selector-item-secondary-text"><button name ="add-product" id="add-product" type="button" value ="'.$variant['id'].'" class="btn btn-primary" >+</button></div>
+                                    <div class="selector-item-secondary-text"><button name ="add-product" id="add-product" type="button" value ="id=' . $variant['id'] . '&price=' . $variant["price"] . '" class="btn btn-primary" >+</button></div>
                                 </div>
                             </div>
                         </label>
-                        <input type="hidden" id="variant_'.$variant['id'].'_image" name="variant_'.$variant['id'].'_image" value="'.$product["image"]['src'].'">
+                        <input type="hidden" id="variant_' . $variant['id'] . '_image" name="variant_' . $variant['id'] . '_image" value="' . $product["image"]['src'] . '">
+                        <input type="hidden" id="reg_price' . $variant['id'] . '" name="reg_price' . $variant['id'] . '" value="' . $variant["price"] . '">
                        ';
                     }
                     $output .= '</div>';
@@ -263,11 +232,17 @@ class ProductController extends Controller
         return $existeds;
     }
 
+    function getBundle($bundle_id)
+    {
+        $variant_ids = DB::table('bundle_products')->where('bundle_id', $bundle_id)->pluck('variant_id')->toArray();
+        return $variant_ids;
+    }
+
     function getBundleImages($bundle_id)
     {
         $variant_ids = self::getBundle($bundle_id);
         $images = [];
-        foreach ($variant_ids as $variant_id){
+        foreach ($variant_ids as $variant_id) {
             $image = DB::table('bundle_products')->where('variant_id', $variant_id)->value('image');
             $images[$variant_id] = $image;
         }
@@ -302,16 +277,17 @@ class ProductController extends Controller
                             <th style="width: 10%">Quantity</th>
                             <th style="width: 15%">Regular Price</th>
                             <th style="width: 15%">Bundle Price</th>
-                            <th style="width: 5%">Edit</th>
+                            
                             <th style="width: 5%">Remove</th>
                         </tr>';
                 //var_dump($products);
                 foreach ($selectedProducts as $key => $product) {
                     foreach ($product['variants'] as $variant) {
                         echo '<tr>
+                            <input type="hidden" name="selected_products[]" value="' . $variant['id'] . '">
                             <td><img width="40px" height="40px" src="' . $product["image"]["src"] . '"></td>
                             <td>' . $product['title'] . ' ' . $variant["title"] . '</td>
-                            <td><select class="quantity" id="quantity' . $variant['id'] . '" name="quantity' . $variant['id'] . '" onchange="refreshPrice();">';
+                            <td><select class="quantity" id="quantity' . $variant['id'] . '" name="quantity' . $variant['id'] . '">';
                         for ($i = 1; $i < 11; $i++) {
                             echo '
                                 <option value="' . $i . '">' . $i . '</option>
@@ -321,8 +297,7 @@ class ProductController extends Controller
                         echo '</select></td>
                         <td id="price' . $variant['id'] . '">' . $price[0] . '</td>
                             <td id="discount-price' . $variant['id'] . '"></td>
-                            <td></td>
-                            <td></td>';
+                            <td><button class="btn btn-danger" type="button" value="' . $variant['id'] . '" onclick="removeSelected(this.value);"><i class="fas fa-trash"></i></button></td>';
                     }
                 }
             }
@@ -473,8 +448,8 @@ class ProductController extends Controller
         $output .= '<div class="col-md-3"><img width="200px" height="200px" src="' . $first_value . '"></div>';
         unset($images[$first_key]);
         foreach ($images as $image) {
-                    $output .= '<div class="col-md-1"><i class="fa fa-plus-circle"></i></div>';
-                    $output .= '<div class="col-md-3">
+            $output .= '<div class="col-md-1"><i class="fa fa-plus-circle"></i></div>';
+            $output .= '<div class="col-md-3">
                             <img width="200px" height="200px" src="' . $image . '">                         
                           </div>';
         }

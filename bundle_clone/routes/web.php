@@ -45,8 +45,8 @@ Route::get('stores/{storeId}/shopify/subscribe', function (\Illuminate\Http\Requ
     return redirect('/home');
 
 })->name('shopify.subscribe');
-Route::match(['get', 'post'],'webhook/shopify/order-created', 'BundleController@captureWebhook');
-Route::match(['get', 'post'],'webhook/shopify/product-updated', 'BundleController@captureWebhook');
+Route::match(['get', 'post'],'webhook/shopify/order-created', 'BundleController@captureOrderCreateWebhook');
+//Route::match(['get', 'post'],'webhook/shopify/product-updated', 'BundleController@captureWebhook');
 Route::post('webhook/shopify/uninstall', function (\Illuminate\Http\Request $request) {
     // Handle app uninstall
 })->middleware('webhook');
@@ -70,7 +70,9 @@ Route::get('/search', function () {
 Route::get('/add-visitors/', 'BundleController@addVisitors');
 Route::get('/added-to-cart/', 'BundleController@addedToCart');
 Route::get('/get-other-existed/{id}', 'ProductController@getOtherExisted');
-Route::get('/get-variants', 'ProductController@getVariants');
+Route::get('/get-variants', 'BundleController@getVariants');
+Route::get('/get-bundle/{id}', 'BundleController@getBundle');
+Route::get('/get-prices/{id}', 'BundleController@getPrices');
 Route::get('/generate-image','ProductController@generateImage')->name('generate-image');
 Route::get('/search/load-widget','ProductController@loadWidget')->name('load-widget');
 Route::get('/search/search-products','ProductController@searchProducts')->name('search-products');
@@ -84,7 +86,7 @@ Route::get('/sync', 'ProductController@sync')->name('sync');
 Route::get('/generate-bundle/', 'ProductController@generate_bundle')->name('generate-bundle');
 Route::get('/generate-pagination/', 'ProductController@generatePagination');
 Route::get('/sync-price', 'ProductController@syncPrice')->name('sync-price');
-Route::get('/change-state', 'ProductController@changeState')->name('change-state');
+Route::get('/change-state', 'BundleController@changeState')->name('change-state');
 Route::get('/load-style', 'ProductController@loadStyle')->name('load-style');
 Route::group(['middleware' => 'auth'], function () {
     //    Route::get('/link1', function ()    {

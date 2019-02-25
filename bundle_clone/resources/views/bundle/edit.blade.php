@@ -5,11 +5,11 @@
         $store_id = session()->get('store_id');
         $selected_ids = array();
         $quantities = array();
-        foreach ($bundle_products as $bundle_product){
+        foreach ($bundle_products as $key => $bundle_product){
             $selected_ids[] = $bundle_product->variant_id;
-            $quantities[] = $bundle_product->quantity;
+            $quantities[$selected_ids[$key]] = $bundle_product->quantity;
         }
-        //var_dump($bundle_products);
+        //var_dump($quantities);
     @endphp
     <form method="post" action="{{ route('bundles.update',$bundle->id) }}" enctype="multipart/form-data">
         @method('PATCH')
@@ -45,12 +45,9 @@
                     <label>Choose products</label>
                     <div class="box-body">
                         <button type="button" id="add-products" class="btn btn-default" data-toggle="modal"
-                                data-target="#modal-default" onClick="getSelectedId();">Add
+                                data-target="#modal-default">Add
                             Products
                         </button>
-                        <div id="msg" class="ajax_response">
-
-                        </div>
                     </div>
                 </div>
             </div>
@@ -76,26 +73,14 @@
                         </span>
                         </div>
 
-                        <div class="form-group">
-                            <select name="cateValue" id="cateValue" class="form-control"
-                                    style="display: inline-block;width:185px;float:right">
 
-                            </select>
-                            <input type="text" class="form-control"
-                                   style="display: inline-block;width:100px;float:right"
-                                   placeholder="equals" disabled=""><select name="category" id="category"
-                                                                            class="form-control"
-                                                                            style="display: inline-block;width:185px;float:right">
-                                <option>--</option>
-                                <option value="product_type">Product Types</option>
-                                <option value="vendor">Vendors</option>
-                            </select><input type="text" class="form-control"
-                                            style="display: inline-block;width:100px;float:right" placeholder="Where"
-                                            disabled="">
-                        </div>
                     </div>
 
                     <div class="list-group" id="products">
+
+                    </div>
+
+                    <div class="pagination" id="pagination">
                     </div>
 
                     <div class="modal-footer">
@@ -115,8 +100,6 @@
             <div class="box-body">
                 <div class="form-group">
                     <label>Setup</label>
-                    <button id="reloadPrice" style="float:right" class="btn btn-secondary" type="button"
-                            onClick="updateDiscountPrice();"><i class="fas fa-refresh"></i></button>
                     <div class="box-body">
                         <table class="table" id="setup-products">
 
@@ -135,7 +118,7 @@
                             <tr class="noBorder" id="subTable2" style="visibility: hidden;">
                                 <td>
                                     <button type="button" id="add-products" class="btn btn-default" data-toggle="modal"
-                                            data-target="#modal-default" onClick="getSelectedId();">Add
+                                            data-target="#modal-default">Add
                                         Products
                                     </button>
                                 </td>
@@ -145,10 +128,18 @@
                                     <input type="text" name="discount_price" id="discount_price" placeholder="Enter ..."
                                            style="padding: 5px;" class="form-control"
                                            value="{{$bundle->discount_price}}">
+
                                     <small id="price_warning"></small>
                                 </td>
-                                <td></td>
-                                <td></td>
+                                <td>
+                                    <button id="sync" style="float:right" class="btn btn-secondary" type="button"
+                                            onClick="refreshPrice()"><i
+                                            class="fas fa-refresh"></i>
+                                    </button>
+                                </td>
+                                <td>
+
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -193,7 +184,7 @@
                            onClick="load_widget(this.value, this.checked);"> Combination &nbsp;&nbsp;&nbsp;
                     <input type="radio" name="image_style" value="1" onClick="load_widget(this.value, this.checked);">
                     One image
-                    <div class="container" id="full_widget" style="width: auto; height:auto">
+                    <div class="container" style="width: auto; height:auto">
                         <div class="row justify-content-md-center">
                             <div class="col col-lg-6" style="border:solid rgba(0,0,0,0.47) 2px;" id="widget">
 
@@ -209,7 +200,7 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" id="base_price" name="base_price">
+        <input type="hidden" id="base_price" name="base_price" value="{{$bundle->base_total_price}}">
         <input type="hidden" id="store_id" name="store_id" value="{{{$store_id}}}">
         <div class="modal-footer">
             <button type="button" class="btn btn-default">Discard
@@ -218,326 +209,53 @@
         </div>
     </form>
     <script type="text/javascript">
-        $(document).ready(function () {
-            function load_cate_value(value) {
-                $.ajax({
-                    url: "{{route('category')}}",
-                    method: "GET",
-                    data: {category: value},
-                    success: function (data) {
-                        $('#cateValue').html(data);
-                    }
-                });
+        var selected = new Array;
+        var prices = new Array;
+        var bundle_image = '{{ $bundle->image }}';
+        var bundle_id = {{ $bundle->id }};
+
+        function loadQuantity() {
+            @php
+                $selected_ids = array();
+            $quantities = array();
+            foreach ($bundle_products as $key => $bundle_product){
+                $selected_ids[] = $bundle_product->variant_id;
+                $quantities[$selected_ids[$key]] = $bundle_product->quantity;
             }
+                $js_array = json_encode($quantities);
+            echo "quantities = ". $js_array . ";";
+            @endphp
+                for (var id in quantities) {
+            $("#quantity" + id).val(quantities[id]);
+            console.log(id+':'+quantities[id]);
+        }
+        console.log(quantities);
+        }
 
-            $('#category').on('change', function () {
-                var input = $("#category option:selected").val();
-                console.log(input);
-                load_cate_value(input);
-                load_widget(input);
+        $(document).ready(function () {
+            $.ajax({
+                url: "/get-bundle/" + bundle_id,
+                method: "GET",
+                success: function (data) {
+                    load_data_to_table(data);
+                    load_widget(data);
+                    selected = data;
+                }
             });
-
-            var selected_id = {!! json_encode($selected_ids) !!};
-            load_data_to_table(selected_id);
             load_style($('bundle_style').val(), true);
             $("input[name=bundle_style][value=" + {{$bundle->bundle_style}} +"]").attr('checked', 'checked');
             $("input[name=image_style][value=" + {{$bundle->image_style}} +"]").attr('checked', 'checked');
-            load_widget(selected_id);
-
-            function load_data_to_table(value) {
-                $.ajax({
-                    url: "{{route('table-products')}}",
-                    method: "GET",
-                    data: {products: value},
-                    success: function (data) {
-                        $('#subTable').css("visibility", "visible");
-                        $('#subTable2').css("visibility", "visible");
-                        $('#setup-products').html(data);
-                        var bundle_base = calcPrice(0)[1];
-                        $('#price_warning').html('Lower than ' + bundle_base);
-                    }
-                });
-            }
-
-            function load_widget(input) {
-                $.ajax({
-                    url: "{{route('load-widget')}}",
-                    method: "GET",
-                    data: {products: input},
-                    success: function (data) {
-                        $('#widget').html(data);
-                        //alert('Loaded widget');
-                    }
-                });
-            }
-
-            $('#products-to-table').click(function () {
-                console.log($.makeArray($('input[name="selected_products[]"]:checked')));
-                var input = getSelectedProducts();
-                console.log(input);
-                if (input.length === 0) {
-                    $('#subTable').css("visibility", "hidden");
-                    console.log('go');
-                }
-                load_data_to_table(input);
-                load_widget(input);
-                //$('#bundle_style').attr("checked", "checked");
-            });
-
-                var discount = parseFloat($('#discount_percent').val());
-                console.log(discount);
-
-
-                load_prices(discount);
-
-                function load_discount_percent(base_price, discount_price) {
-                    $.ajax({
-                        url: "{{route('show-percent')}}",
-                        method: "GET",
-                        data: {base_price: base_price, discount_price: discount_price},
-                        success: function (data) {
-                            console.log(data);
-                            $('#discount_percent').val(data);
-                        }
-                    });
-                }
-
-                function load_discounted_price(value, id, index) {
-                    $.ajax({
-                        url: "{{route('show-price')}}",
-                        method: "GET",
-                        data: {price: value, index: index},
-                        success: function (data) {
-                            $('#discount-price' + id).html(data);
-                        }
-                    });
-                }
-
-                function load_prices(discount) {
-                    var input = discount;
-                    var selected = selected_id;
-                    if (input !== '') {
-                        var price = calcPrice(input);
-                        selected.forEach(function (id, index) {
-                            load_discounted_price(price[0], id, index);
-                        });
-                        load_discount_percent(price[1], input);
-                        document.getElementById('base_price').value = price[1];
-
-                    } else {
-                        var price = calcPrice(0);
-                        selected.forEach(function (id, index) {
-                            load_discounted_price(price[0], id, index);
-                        });
-                        load_discount_percent(price[1], input);
-                        document.getElementById('base_price').value = price[1];
-                    }
-                }
-                $('#discount_price').keyup(function () {
-                    var discount = $(this).val();
-                    load_prices(discount);
-                });
-
-                $('#discount_percent').keyup(function () {
-                    var input = $(this).val();
-                    var selected = selected_id;
-                    if (input !== '') {
-                        var price = calcPrice(input);
-                        selected.forEach(function (id, index) {
-                            load_discounted_price(price[0], id, index);
-                        });
-                        document.getElementById('base_price').value = price[1];
-                        $('#discount_price').val((price[1]*(100-price[3])/100).toFixed(2));
-                    } else {
-                        var price = calcPrice(0);
-                        selected.forEach(function (id, index) {
-                            load_discounted_price(price[0], id, index);
-                            document.getElementById('base_price').value = price[1];
-                        });
-                    }
-
-                });
-
         });
-
-        function getSelectedProducts() {
-            var total = $('input[name="selected_products[]"]:checked').length;
-            $.ajax({
-                url: "{{route('save')}}",
-                data: {total: total}
-            });
-            //console.log(total);
-            var selectedId = [];
-            $('input[name="selected_products[]"]:checked').each(function () {
-                selectedId.push($(this).val());
-            });
-            //console.log(selectedId);
-            return selectedId;
-        }
-
-        var selected_id = {!! json_encode($selected_ids) !!};
-
-        function updateDiscountPrice (){
-            var bundle_base = parseInt(document.getElementById('base_price').value);
-            var discount_percent = parseFloat($('#discount_percent').val());
-            $('#discount_price').val((bundle_base*(100-discount_percent)/100).toFixed(2));
-            var selected = selected_id;
-            var price = calcPrice(discount_percent);
-
-        }
-        function refreshPrice() {
-            var bundle_price = calcPrice(0);
-            $('#price_warning').html('Lower than ' + bundle_price[1]);
-            document.getElementById('base_price').value = bundle_price[1];
-            console.log(document.getElementById('base_price').value);
-        }
-
-        function preview($file) {
-            $img_preview = window.URL.createObjectURL($file);
-            document.getElementById('blah').src = $img_preview;
-        }
-
-        function calcPrice($discount) {
-            var price_array = new Array();
-            var input = selected_id;
-            //console.log(input);
-            var bundle_base = 0;
-            var bundle_price = 0;
-            input.forEach(function (id, index) {
-                $quantity = parseInt($("#quantity" + id).val());
-                //console.log($("#quantity" + id).val());
-                $reg_price = parseFloat($("#price" + id).text());
-                //console.log('price of' + id + ':' + $reg_price);
-                $discount_price = ($quantity * $reg_price * (100 - $discount) / 100).toFixed(2);
-                //console.log($discount_price);
-                price_array.push($discount_price);
-                bundle_base += ($quantity * $reg_price);
-                console.log(bundle_base);
-                bundle_price = (bundle_base * (100 - $discount) / 100).toFixed(2);
-            })
-            return [price_array, bundle_base, bundle_price, $discount];
-        }
-
-    </script>
-
-    <script type="text/javascript">
-        function reload_widget(value, checked) {
-            var clicked_value = $('input[name="bundle_style"]:checked').val();
-            load_widget();
-            load_style(clicked_value, true);
-        }
-
-        function load_style(clicked_value, checked) {
-            console.log(checked);
-            if (checked === true) {
-                var input = $('#discount_percent').val();
-                var price = calcPrice(input);
-                $.ajax({
-                    url: "{{route('load-style')}}",
-                    method: "GET",
-                    data: {value: clicked_value, bundle_base: price[1], bundle_price: price[2], discount: price[3]},
-                    success: function (data) {
-                        $('#style_announce').html(data);
-                    }
-                });
-            }
-        }
-
-        function load_widget(img_style, checked) {
-            var img_src = '';
-            if (img_style == 1) {
-                if ($("#image").val()) {
-                    img_src = document.getElementById('blah').src;
-                } else {
-                    img_src = "/images/" + "{{ $bundle->image }}";
-                }
-            }
-            if (checked === true) {
-                console.log(img_style);
-                $.ajax({
-                    url: "{{route('load-widget')}}",
-                    method: "GET",
-                    data: {products: selected_id, style: img_style, img_src: img_src},
-                    success: function (data) {
-                        $('#widget').html(data);
-                        //alert('Loaded widget');
-                    }
-                });
-            }
-        }
 
         $(document).ready(function () {
-            load_data();
-
-            //console.log($.makeArray($('input[name="selected_products[]"]:checked')));
-
-            function load_data(value) {
-                // $select = getSelectedId();
-                $.ajax({
-                    url: "{{route('search-products')}}",
-                    method: "GET",
-                    data: {search: value},
-                    success: function (data) {
-
-                        $('#products').html(data);
-
-
-                        //boxCheck($select);
-                    }
-                });
-            }
-
-            $('#search_product').keyup(function () {
-                console.log('hello');
-                var input = $(this).val();
-                if (input !== '') {
-                    load_data(input);
-                }
-                else {
-
-                    load_data();
+            $.ajax({
+                url: "/get-prices/" + bundle_id,
+                method: "GET",
+                success: function (data) {
+                    prices = data;
                 }
             });
         });
-
-        function getSelectedId() {
-            $select = new Array();
-            console.log('new');
-            $selected = $.makeArray($('input[name="selected_products[]"]:checked'));
-            console.log($selected);
-            $selected.forEach(function (selected, index) {
-                if (!$select.includes(selected['id'])) ;
-                $select.push(selected['id']);
-            });
-            console.log($select);
-            sessionStorage.setItem("selected_id", $select);
-            $select = $select.join('').split('');
-            return $select;
-        }
-
-        function boxCheck(boxId) {
-            boxId.forEach(function (id, index) {
-                $('#' + id).attr('checked', true);
-            });
-        }
     </script>
-
-
-    <script>
-        function Clear() {
-            clearRadioGroup("RadioInputName");
-        }
-
-        function clearRadioGroup(GroupName) {
-            var ele = document.getElementsByName(GroupName);
-            for (var i = 0; i < ele.length; i++)
-                ele[i].checked = false;
-        }
-    </script>
-    <script type="text/javascript">
-
-        $.ajaxSetup({headers: {'csrftoken': '{{ csrf_token() }}'}});
-
-    </script>
-
+    <script type="text/javascript" src="{{ asset('js/edit-page.js') }}"></script>
 @endsection

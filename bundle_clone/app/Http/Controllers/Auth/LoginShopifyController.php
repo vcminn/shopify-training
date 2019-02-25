@@ -75,8 +75,8 @@ class LoginShopifyController extends Controller
         session(['access_token'=> $access_token]);
 
         Auth::login($user, true);
-        dispatch(new \App\Jobs\RegisterProductUpdateShopifyWebhook($store->domain, $shopifyUser->token, $store));
-        dispatch(new \App\Jobs\RegisterUninstallShopifyWebhook($store->domain, $shopifyUser->token, $store));
+//        dispatch(new \App\Jobs\RegisterProductUpdateShopifyWebhook($store->domain, $shopifyUser->token, $store));
+//        dispatch(new \App\Jobs\RegisterUninstallShopifyWebhook($store->domain, $shopifyUser->token, $store));
         dispatch(new \App\Jobs\RegisterOrderCreateShopifyWebhook($store->domain, $shopifyUser->token, $store));
         return redirect('/products');
     }

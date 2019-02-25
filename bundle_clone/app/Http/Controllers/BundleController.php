@@ -79,7 +79,8 @@ class BundleController extends Controller
                             'store_id' => session()->get('store_id'),
                             'bundle_id' => $bundles->id,
                             'variant_id' => $id,
-                            'image' => $request->get('variant_'.$id.'_image'),
+                            'price' => $request->get('reg_price' . $id),
+                            'image' => $request->get('variant_' . $id . '_image'),
                             'quantity' => $request->get('quantity' . $id),
                             'stock' => $stock
                         ]);
@@ -188,19 +189,31 @@ class BundleController extends Controller
         }
     }
 
-    function captureWebhook(Request $request)
+    function captureOrderCreateWebhook(Request $request)
     {
-        $data = file_get_contents('php://input');
         $method = $request->method();
         if ($method == 'POST') {
-            $response = BundleResponse::find(3);
+            $data = file_get_contents('php://input');
+            $data = json_decode($data, true);
+            $line_items = $data["line_items"];
+            $bundles = [];
+            foreach ($line_items as $line_item) {
+                foreach ($line_item['properties'] as $property) {
+                    if ($property['name'] == '_discount') {
+                        $discount = $property['value'];
+                    } else if ($property['name'] == '_bundle_id') {
+                        $id = $property['value'];
+                    }
+                }
+            }
+            if ($discount != 0 && $id)
+                $bundles[] = $id;
+        }
+        foreach ($bundles as $bundle) {
+            $response = BundleResponse::find($bundle);
             $response->sales += 1;
             $response->save();
-            Log::info($data);
-        } else {
-            Log::info($method);
         }
-        //return $request;
     }
 
     function addVisitors()
@@ -235,4 +248,39 @@ class BundleController extends Controller
         return $bundles;
     }
 
+    function getBundle($bundle_id)
+    {
+        $variant_ids = DB::table('bundle_products')->where('bundle_id', $bundle_id)->pluck('variant_id')->toArray();
+        return $variant_ids;
+    }
+
+    function getPrices($bundle_id){
+        $prices = [];
+        $variant_ids = $this->getBundle($bundle_id);
+        foreach ($variant_ids as $variant_id){
+            $prices[$variant_id]=DB::table('bundle_products')->where('variant_id', $variant_id)->where('bundle_id',$bundle_id)->value('price');
+        }
+        return $prices;
+    }
+
+    function getVariants()
+    {
+        $variant_id = $_GET['variant_id'];
+        $bundle_id = DB::table('bundle_products')->where('variant_id', $variant_id)->value('bundle_id');
+        $variants = DB::table('bundle_products')->select('variant_id', 'quantity')->where('bundle_id', $bundle_id)->get();
+        $bundle = DB::table('bundles')->where('id', $bundle_id)->get();
+        return [$variants, $bundle];
+    }
+
+    function changeState()
+    {
+        if (isset($_GET['value'])) {
+            $store_id = session()->get('store_id');
+            $value = $_GET['value'];
+            $bundle_id = $_GET['id'];
+            DB::table('bundles')
+                ->where('store_id', $store_id)->where('id', $bundle_id)
+                ->update(['active' => $value]);
+        }
+    }
 }

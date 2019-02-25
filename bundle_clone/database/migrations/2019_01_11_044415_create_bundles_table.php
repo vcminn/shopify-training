@@ -35,6 +35,7 @@ class CreateBundlesTable extends Migration
             $table->integer('store_id');
             $table->integer('bundle_id');
             $table->string('variant_id');
+            $table->float('price');
             $table->string('image');
             $table->integer('quantity');
             $table->integer('stock');
