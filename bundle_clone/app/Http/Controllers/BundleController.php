@@ -153,10 +153,35 @@ class BundleController extends Controller
             $bundle_product->quantity = $request->get('quantity' . $variant_id);
             $bundle_product->save();
         }
+        $bundle_variant_ids = BundleProduct::where('bundle_id', $bundles->id)
+            ->where('store_id', session()->get('store_id'))
+            ->pluck('variant_id')->toArray();
+        $selected_ids = $request->input('selected_products');
+        foreach ($bundle_variant_ids as $bundle_variant_id) {
+            if (!in_array($bundle_variant_id, $selected_ids)) {
+                $product = BundleProduct::where('variant_id', $bundle_variant_id);
+                $product->delete();
+            }
+        }
+        $products = session()->get('all_products');
+        foreach ($selected_ids as $selected_id) {
+            if (!in_array($selected_id, $bundle_variant_ids)) {
+                $bundle_product = new BundleProduct([
+                    'store_id' => session()->get('store_id'),
+                    'bundle_id' => $bundles->id,
+                    'variant_id' => $selected_id,
+                    'price' => $request->get('reg_price' . $selected_id),
+                    'image' => $request->get('variant_' . $selected_id . '_image'),
+                    'quantity' => $request->get('quantity' . $selected_id),
+                    'stock' => $this->getStock($products,$selected_id),
+                ]);
+                $bundle_product->save();
+            }
+        }
 
 
         //return null;
-        return redirect('/home')->with('success', 'Stock has been updated');
+        return redirect('/home')->with('success', 'Bundle has been updated');
     }
 
     /**
@@ -187,6 +212,19 @@ class BundleController extends Controller
             $image->move($destinationPath, $name);
             return $name;
         }
+    }
+
+    function getStock($products, $variant_id)
+    {
+        foreach ($products as $key => $product) {
+            foreach ($product['variants'] as $variant) {
+                if ($variant_id == $variant['id']) {
+                    $stock = $variant["inventory_quantity"];
+                    return $stock;
+                }
+            }
+        }
+
     }
 
     function captureOrderCreateWebhook(Request $request)
@@ -254,11 +292,12 @@ class BundleController extends Controller
         return $variant_ids;
     }
 
-    function getPrices($bundle_id){
+    function getPrices($bundle_id)
+    {
         $prices = [];
         $variant_ids = $this->getBundle($bundle_id);
-        foreach ($variant_ids as $variant_id){
-            $prices[$variant_id]=DB::table('bundle_products')->where('variant_id', $variant_id)->where('bundle_id',$bundle_id)->value('price');
+        foreach ($variant_ids as $variant_id) {
+            $prices[$variant_id] = DB::table('bundle_products')->where('variant_id', $variant_id)->where('bundle_id', $bundle_id)->value('price');
         }
         return $prices;
     }
