@@ -236,7 +236,7 @@ $(document).on('change', '.quantity', function () {
 
 function refreshPrice() {
     var price = calcPrice($('#discount_percent').val());
-
+    $('#base_price').val(price[1].toFixed(2));
     $('#discount_price').val((price[1] * (100 - price[3]) / 100).toFixed(2));
 }
 

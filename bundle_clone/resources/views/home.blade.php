@@ -1,5 +1,5 @@
 @extends('adminlte::layouts.app')
-
+@section('contentheader_title', 'Smart-Bundle')
 @section('main-content')
     @guest
         <div class="container">

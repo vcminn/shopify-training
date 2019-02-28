@@ -46,7 +46,7 @@
                             <form action="delete\{{$bundle->id}}" method="get">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-danger" type="submit"><i class="fas fa-trash"></i></button>
+                                <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to delete this bundle?');"><i class="fas fa-trash"></i></button>
                             </form>
                         </td>
                     </tr>

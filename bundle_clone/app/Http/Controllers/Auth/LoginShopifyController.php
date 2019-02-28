@@ -34,7 +34,6 @@ class LoginShopifyController extends Controller
             ->setConfig($config)
             ->scopes(['read_products','write_products','read_orders', 'write_orders'])
             ->redirect();
-
     }
 
     /**
@@ -45,7 +44,6 @@ class LoginShopifyController extends Controller
     public function handleProviderCallback()
     {
         $shopifyUser = Socialite::driver('shopify')->user();
-        print_r($shopifyUser);
         // Create user
         $user = User::firstOrCreate([
             'name' => $shopifyUser->name,

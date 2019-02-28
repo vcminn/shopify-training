@@ -148,11 +148,7 @@ class BundleController extends Controller
         $bundle_products = BundleProduct::where('bundle_id', $bundles->id)
             ->where('store_id', session()->get('store_id'))
             ->get();
-        foreach ($bundle_products as $bundle_product) {
-            $variant_id = $bundle_product->variant_id;
-            $bundle_product->quantity = $request->get('quantity' . $variant_id);
-            $bundle_product->save();
-        }
+
         $bundle_variant_ids = BundleProduct::where('bundle_id', $bundles->id)
             ->where('store_id', session()->get('store_id'))
             ->pluck('variant_id')->toArray();
@@ -162,6 +158,11 @@ class BundleController extends Controller
                 $product = BundleProduct::where('variant_id', $bundle_variant_id);
                 $product->delete();
             }
+        }
+        foreach ($bundle_products as $bundle_product) {
+        $variant_id = $bundle_product->variant_id;
+        $bundle_product->quantity = $request->get('quantity' . $variant_id);
+        $bundle_product->save();
         }
         $products = session()->get('all_products');
         foreach ($selected_ids as $selected_id) {

@@ -142,7 +142,7 @@
                         <input type="file" name="image" id="fileToUpload" onchange="preview(this.files[0]);">
                         <small>Add your own bundle image if there are more than 4 products.</small>
                         <div class="form-group">
-                            <img id="blah" alt="your image" width="200" height="200"/>
+                            <img id="blah" width="200" height="200"/>
                         </div>
                     </div>
                 </div>

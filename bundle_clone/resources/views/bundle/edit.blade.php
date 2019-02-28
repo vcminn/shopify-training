@@ -1,5 +1,5 @@
 @extends('adminlte::layouts.app')
-@section('contentheader_title', 'Create bundle')
+@section('contentheader_title', 'Edit bundle')
 @section('main-content')
     @php
         $store_id = session()->get('store_id');
@@ -154,7 +154,7 @@
                         <input type="file" name="image" id="image" onchange="preview(this.files[0]);">
                         <small>Add your own bundle image if there are more than 4 products.</small>
                         <div class="form-group">
-                            <img id="blah" alt="your image" width="200" height="200"/>
+                            <img id="blah"  width="200" height="200"/>
                         </div>
                     </div>
                 </div>
